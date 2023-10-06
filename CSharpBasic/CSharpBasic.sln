@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inheritance", "Inheritance\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Delegates", "Delegates\Delegates.csproj", "{2CCD1A07-6DD1-42DD-81AD-93EA0E888C4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boxing", "Boxing\Boxing.csproj", "{AD311468-8E5E-4D64-80D9-73BF31D539F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boxing", "Boxing\Boxing.csproj", "{AD311468-8E5E-4D64-80D9-73BF31D539F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collections", "Collections\Collections.csproj", "{D0E30A99-AEA0-4C5E-8F21-EB1A6D242B25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{AD311468-8E5E-4D64-80D9-73BF31D539F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD311468-8E5E-4D64-80D9-73BF31D539F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD311468-8E5E-4D64-80D9-73BF31D539F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0E30A99-AEA0-4C5E-8F21-EB1A6D242B25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0E30A99-AEA0-4C5E-8F21-EB1A6D242B25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0E30A99-AEA0-4C5E-8F21-EB1A6D242B25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0E30A99-AEA0-4C5E-8F21-EB1A6D242B25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
