@@ -56,6 +56,38 @@
 
             // Todo -> 위 내용 T타입 동적배열로 구현하기.
             MyDynamicArray<SlotData> inventory2 = new MyDynamicArray<SlotData>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                inventory2.Add(new SlotData(0, 0));
+            }
+
+            inventory2[0] = new SlotData((int)ItemID.RedPotion, 40);
+            inventory2[1] = new SlotData((int)ItemID.BluePotion, 99);
+            inventory2[2] = new SlotData((int)ItemID.BluePotion, 50);
+
+            Console.WriteLine("파란포션 5개 획득 전: ");
+
+            for (int i = 0; i < 10; i++)
+            {
+                Console.WriteLine($"[{(ItemID)inventory2[i].id}] : [{inventory2[i].num}]");
+            }
+
+            // object 타입이 아니기 때문에 Unboxing 때문에 SlotData를 캐스팅하지 않아도 된다.
+            int availableSlotIndex2 = inventory2.FindIndex(slotData => slotData.isEmpty ||
+                                                                    (slotData.id == (int)ItemID.BluePotion &&
+                                                                    slotData.num <= 99 - 5));
+
+            int expected2 = inventory2[availableSlotIndex2].num + 5;
+
+            inventory2[availableSlotIndex2] = new SlotData((int)ItemID.BluePotion, expected2);
+
+            Console.WriteLine("파란포션 5개 획득 후: ");
+
+            for (int i = 0; i < 10; i++)
+            {
+                Console.WriteLine($"[{(ItemID)inventory2[i].id}] : [{inventory2[i].num}]");
+            }
         }
     }
 }
