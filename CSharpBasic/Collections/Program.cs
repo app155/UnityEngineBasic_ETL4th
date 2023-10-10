@@ -167,8 +167,21 @@ namespace Collections
 
             #region LinkedList
 
+            MyLinkedList<int> myLinkedList = new MyLinkedList<int>();
 
+            myLinkedList.AddLast(new Node<int>(1));
+            Node<int> willDeleteNode = new Node<int>(3);
+            myLinkedList.AddLast(willDeleteNode);
+            myLinkedList.AddLast(new Node<int>(5));
+            Node<int> end = new Node<int>(7);
+            myLinkedList.AddLast(end);
 
+            int k = myLinkedList.Find(3);
+            Console.WriteLine(k);
+
+            myLinkedList.AddFirst(new Node<int>(111));
+            myLinkedList.RemoveFirst();
+            myLinkedList.RemoveLast();
             #endregion
         }
     }
