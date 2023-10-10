@@ -1,4 +1,7 @@
-﻿namespace Collections
+﻿using System.Collections;
+using System.Collections.Generic;
+
+namespace Collections
 {
     enum ItemID
     {
@@ -12,6 +15,11 @@
 
         public int id;
         public int num;
+
+        public void DoSomething<T>()
+        {
+
+        }
 
         public SlotData(int id, int num)
         {
@@ -29,6 +37,8 @@
     {
         static void Main(string[] args)
         {
+            #region DynamicArray
+
             MyDynamicArray inventory = new MyDynamicArray();
 
             for (int i = 0; i < 32; i++)
@@ -42,7 +52,6 @@
 
             // ex) 파란포션 5개 획득.
             // 1. 파란포션 5개가 들어갈 수 있는 공간 찾기
-
             int availableSlotIndex = inventory.FindIndex(slotData => ((SlotData)slotData).isEmpty ||
                                                                         (((SlotData)slotData).id == (int)ItemID.BluePotion &&
                                                                         ((SlotData)slotData).num <= 99 - 5));
@@ -88,6 +97,79 @@
             {
                 Console.WriteLine($"[{(ItemID)inventory2[i].id}] : [{inventory2[i].num}]");
             }
+
+            MyDynamicArray<SlotData> inventory1 = new MyDynamicArray<SlotData>();
+
+            #region Enumerator 순회 = for-each
+
+            // using 구문 : IDisposable 객체의 Dispose() 호출을 보장하는 구문
+            using (IEnumerator<SlotData> e1 = inventory1.GetEnumerator())
+            using (IEnumerator<SlotData> e2 = inventory2.GetEnumerator())
+            {
+                while (e1.MoveNext() && e2.MoveNext())
+                {
+                    
+                }
+
+                e1.Reset();
+                e2.Reset();
+            }
+            // e1.Dispose();
+            // e2.Dispose();
+
+            // for-each문과 같다.
+            foreach (SlotData slotData in inventory2)
+            {
+                Console.WriteLine($"[{(ItemID)slotData.id}], [{slotData.num}");
+            }
+            // 즉 for-each문도 읽기 전용 순회이므로, 도중에 write 하면 안됨.
+
+            #endregion
+
+            #region ArrayList, List
+
+            ArrayList arrayList = new ArrayList();
+            arrayList.Add("asdf");
+            arrayList.Add(1);
+            arrayList.Remove("asdf");
+
+            string name = "asdf";
+            arrayList.Add(name);
+            arrayList.Remove(name);
+
+            List<string> list = new List<string>();
+            list.Add("asdf");
+            list.Remove("asdf");
+            list.Find(x => x == "asdf");
+            list.Add("fdsa");
+            #endregion
+            #endregion
+
+            #region Queue
+
+            Queue<int> queue = new Queue<int>();
+            queue.Enqueue(3); // 삽입
+
+            if (queue.Peek() > 0) // 탐색 -> 맨 앞의 값만 탐색 가능.
+                queue.Dequeue(); // 삭제
+
+            #endregion
+
+            #region Stack
+
+            Stack<int> stack = new Stack<int>();
+            stack.Push(3); // 삽입
+
+            if (stack.Peek() > 0) // 탐색 -> 맨 뒤의 값만 탐색 가능.
+                stack.Pop(); // 삭제
+
+            #endregion
+
+            #region LinkedList
+
+
+
+            #endregion
         }
     }
 }
