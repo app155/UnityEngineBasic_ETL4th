@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 namespace Collections
 {
 
-    public class Node<T>
+    public class MyLinkedListNode<T>
     {
         public T? Value => _value;
-        public Node<T>? prev;
-        public Node<T>? next;
+        public MyLinkedListNode<T>? prev;
+        public MyLinkedListNode<T>? next;
 
         private T? _value;
 
-        public Node(T value)
+        public MyLinkedListNode(T value)
         {
             this._value = value;
         }
@@ -25,12 +25,12 @@ namespace Collections
     {
         public int Count => first == null && last == null ? 0 : _count;
 
-        public Node<T>? first;
-        public Node<T>? last;
+        public MyLinkedListNode<T>? first;
+        public MyLinkedListNode<T>? last;
 
         private int _count;
 
-        public void AddFirst(Node<T> node)
+        public void AddFirst(MyLinkedListNode<T> node)
         {
             if (_count == 0)
                 last = node;
@@ -45,39 +45,49 @@ namespace Collections
             _count++;
         }
 
-        public void AddLast(Node<T> node)
+        public void AddLast(MyLinkedListNode<T> node)
         {
             if (_count == 0)
-            {
                 first = node;
-            }
-
 
             else
             {
                 node.prev = last;
                 last.next = node;
             }
+
             last = node;
             _count++;
         }
 
-        public void AddAfterPivot(Node<T> pivot, Node<T> node)
+        public void AddAfterPivot(MyLinkedListNode<T> pivot, MyLinkedListNode<T> node)
         {
-            pivot.next.prev = node;
-            node.prev = pivot;
-            node.next = pivot.next;
-            pivot.next = node;
-            _count++;
+            if (pivot == last)
+                AddLast(node);
+
+            else
+            {
+                pivot.next.prev = node;
+                node.prev = pivot;
+                node.next = pivot.next;
+                pivot.next = node;
+                _count++;
+            }
         }
 
-        public void AddBeforePivot(Node<T> pivot, Node<T> node)
+        public void AddBeforePivot(MyLinkedListNode<T> pivot, MyLinkedListNode<T> node)
         {
-            pivot.prev.next = node;
-            node.next = pivot;
-            node.prev = pivot.prev;
-            pivot.prev = node;
-            _count++;
+            if (pivot == first)
+                AddFirst(node);
+
+            else
+            {
+                pivot.prev.next = node;
+                node.next = pivot;
+                node.prev = pivot.prev;
+                pivot.prev = node;
+                _count++;
+            }
         }
 
         public bool RemoveFirst()
@@ -122,7 +132,7 @@ namespace Collections
             return true;
         }
 
-        public void Remove(Node<T> node)
+        public void Remove(MyLinkedListNode<T> node)
         {
             if (node == first)
                 RemoveFirst();
@@ -138,10 +148,9 @@ namespace Collections
             }
         }
 
-
         public T Find(T value)
         {
-            Node<T> now = first;
+            MyLinkedListNode<T> now = first;
 
             while (now.next != null)
             {

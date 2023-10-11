@@ -169,19 +169,27 @@ namespace Collections
 
             MyLinkedList<int> myLinkedList = new MyLinkedList<int>();
 
-            myLinkedList.AddLast(new Node<int>(1));
-            Node<int> willDeleteNode = new Node<int>(3);
+            myLinkedList.AddLast(new MyLinkedListNode<int>(1));
+            MyLinkedListNode<int> willDeleteNode = new MyLinkedListNode<int>(3);
             myLinkedList.AddLast(willDeleteNode);
-            myLinkedList.AddLast(new Node<int>(5));
-            Node<int> end = new Node<int>(7);
+            myLinkedList.AddLast(new MyLinkedListNode<int>(5));
+            MyLinkedListNode<int> end = new MyLinkedListNode<int>(7);
             myLinkedList.AddLast(end);
 
             int k = myLinkedList.Find(3);
             Console.WriteLine(k);
 
-            myLinkedList.AddFirst(new Node<int>(111));
+            myLinkedList.AddFirst(new MyLinkedListNode<int>(111));
             myLinkedList.RemoveFirst();
             myLinkedList.RemoveLast();
+
+            MyLinkedList2<int> mLL = new MyLinkedList2<int>();
+            mLL.AddLast(2);
+            mLL.AddLast(4);
+            mLL.AddLast(3);
+            mLL.AddLast(11);
+            mLL.Find(x => x > 0);
+
             #endregion
         }
     }
