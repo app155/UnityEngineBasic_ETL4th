@@ -191,6 +191,35 @@ namespace Collections
             mLL.Find(x => x > 0);
 
             #endregion
+
+            #region HashTable
+
+            MyHashTable<string, int> myHashTable = new MyHashTable<string, int>();
+
+            myHashTable.Add("asdf", 1);
+            myHashTable.Add("a", 2);
+            myHashTable.Add("s", 3);
+            myHashTable.Add("d", 4);
+            myHashTable.Add("f", 5);
+
+            myHashTable.Remove("s");
+            myHashTable.Remove("ff");
+
+            Console.WriteLine("HashTable Foreach loop Test");
+
+            foreach (KeyValuePair<string, int> pair in myHashTable)
+            {
+                Console.WriteLine($"Key : {pair.Key}, Value : {pair.Value}");
+            }
+
+            Console.WriteLine("Second Test");
+
+            foreach (KeyValuePair<string, int> pair in myHashTable)
+            {
+                Console.WriteLine($"Key : {pair.Key}, Value : {pair.Value}");
+            }
+
+            #endregion
         }
     }
 }

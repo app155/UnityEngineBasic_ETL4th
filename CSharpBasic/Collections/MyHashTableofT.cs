@@ -128,7 +128,8 @@ namespace Collections
                 }
             }
 
-            bucket.Add(new KeyValuePair<TKey, TValue>(key, value));
+            // bucket.Add(new KeyValuePair<TKey, TValue>(key, value));
+            _buckets[index].Add(new KeyValuePair<TKey, TValue>(key, value));
         }
 
         public bool TryAdd(TKey key, TValue value)
@@ -139,7 +140,7 @@ namespace Collections
             // 해당 인덱스에 버킷이 없다면 새로 생성
             if (bucket == null)
             {
-                _buckets[index] = new List<KeyValuePair<TKey, TValue>>();
+                bucket = new List<KeyValuePair<TKey, TValue>>();
                 _validIndexList.Add(index);
             }
 
@@ -153,7 +154,8 @@ namespace Collections
                 }
             }
 
-            bucket.Add(new KeyValuePair<TKey, TValue>(key, value));
+            // bucket.Add(new KeyValuePair<TKey, TValue>(key, value));
+            _buckets[index].Add(new KeyValuePair<TKey, TValue>(key, value));
             return true;
         }
 
@@ -181,7 +183,25 @@ namespace Collections
 
         public bool Remove(TKey key)
         {
-            // 구현해보기
+            int index = Hash(key);
+            List<KeyValuePair<TKey, TValue>> bucket = _buckets[index];
+
+            if (bucket != null)
+            {
+                for (int i = 0; i < bucket.Count; i++)
+                {
+                    if (bucket[i].Key.Equals(key))
+                    {
+                        bucket.RemoveAt(i);
+
+                        if (bucket.Count == 0)
+                            _validIndexList.Remove(index);
+
+                        return true;
+                    }
+                }
+            }
+
             return false;
         }
 
@@ -202,12 +222,71 @@ namespace Collections
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return new Enumerator(this);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return new Enumerator(this);
+        }
+
+        public struct Enumerator : IEnumerator<KeyValuePair<TKey, TValue>>
+        {
+            public KeyValuePair<TKey, TValue> Current => _pair;
+
+            object IEnumerator.Current => _pair;
+
+            private MyHashTable<TKey, TValue> _data;
+            private KeyValuePair<TKey, TValue> _pair;
+            private int _validListIndex; // validIndexList의 인덱스
+            private int _bucketIndex; // validListIndex를 통해 접근한 bucket의 인덱스
+
+            public Enumerator(MyHashTable<TKey, TValue> data)
+            {
+                _data = data;
+                _pair = default;
+                _validListIndex = -1;
+                _bucketIndex = -1;
+            }
+
+            public void Dispose()
+            {
+                
+            }
+
+            public bool MoveNext()
+            {
+                // ;;;;;; 
+                // bucketIndex가 해당 bucket의 끝에 도달했다면 다른 bucket에 접근해야함.
+                // validListIndex를 증가시키면 새 bucket에 접근하게 되므로 bucketIndex를 -1로 초기화함.
+                // validListIndex는 validIndexList의 길이를 넘어설 수 없음.
+                if (_validListIndex == -1 || 
+                    (_validListIndex < _data._validIndexList.Count - 1 && 
+                    _bucketIndex >= _data._buckets[_data._validIndexList[_validListIndex]].Count - 1))
+                {
+                    _validListIndex++;
+                    _bucketIndex = -1;
+                }
+                    
+                // validListIndex로 validIndexList에 인덱스 접근하여 데이터가 존재하는 buckets에 인덱스 접근
+                // 아직 buckets의 끝에 도달하지 못했다면 이동 + _pair갱신
+                // 이동에 성공했으니 true return
+                if (_bucketIndex < _data._buckets[_data._validIndexList[_validListIndex]].Count - 1)
+                {
+                    _bucketIndex++;
+                    _pair = _data._buckets[_data._validIndexList[_validListIndex]][_bucketIndex];
+                    return true;
+                }
+
+                // 위 조건을 모두 빠져나왔다면 이동 불가능이므로 false return
+                return false;
+            }
+
+            public void Reset()
+            {
+                _validListIndex = -1;
+                _bucketIndex = -1;
+            }
         }
     }
 }
