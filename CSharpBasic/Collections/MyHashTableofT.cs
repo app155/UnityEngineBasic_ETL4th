@@ -114,7 +114,7 @@ namespace Collections
             // 해당 인덱스에 버킷이 없다면 새로 생성
             if (bucket == null)
             {
-                _buckets[index] = new List<KeyValuePair<TKey, TValue>>();
+                bucket = _buckets[index] = new List<KeyValuePair<TKey, TValue>>();
                 _validIndexList.Add(index);
             }
 
@@ -128,8 +128,8 @@ namespace Collections
                 }
             }
 
-            // bucket.Add(new KeyValuePair<TKey, TValue>(key, value));
-            _buckets[index].Add(new KeyValuePair<TKey, TValue>(key, value));
+            bucket.Add(new KeyValuePair<TKey, TValue>(key, value));
+            //_buckets[index].Add(new KeyValuePair<TKey, TValue>(key, value));
         }
 
         public bool TryAdd(TKey key, TValue value)
@@ -140,7 +140,7 @@ namespace Collections
             // 해당 인덱스에 버킷이 없다면 새로 생성
             if (bucket == null)
             {
-                bucket = new List<KeyValuePair<TKey, TValue>>();
+                bucket = _buckets[index] = new List<KeyValuePair<TKey, TValue>>();
                 _validIndexList.Add(index);
             }
 
@@ -154,8 +154,8 @@ namespace Collections
                 }
             }
 
-            // bucket.Add(new KeyValuePair<TKey, TValue>(key, value));
-            _buckets[index].Add(new KeyValuePair<TKey, TValue>(key, value));
+            bucket.Add(new KeyValuePair<TKey, TValue>(key, value));
+            // _buckets[index].Add(new KeyValuePair<TKey, TValue>(key, value));
             return true;
         }
 
@@ -256,7 +256,6 @@ namespace Collections
 
             public bool MoveNext()
             {
-                // ;;;;;; 
                 // bucketIndex가 해당 bucket의 끝에 도달했다면 다른 bucket에 접근해야함.
                 // validListIndex를 증가시키면 새 bucket에 접근하게 되므로 bucketIndex를 -1로 초기화함.
                 // validListIndex는 validIndexList의 길이를 넘어설 수 없음.
