@@ -142,7 +142,7 @@ namespace SortAlgos
         {
             if (start < end)
             {
-                int mid = end + (start - end) / 2 - 1; // == (start + end ) /2 - 1, Overflow 방지용
+                int mid = end + (start - end + 1) / 2 - 1; // == (start + end + 1) /2 - 1, Overflow 방지용
                 RecursiveMergeSort(arr, start, mid);
                 RecursiveMergeSort(arr, mid + 1, end);
 
