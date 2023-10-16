@@ -221,6 +221,7 @@ namespace Collections
 
             #endregion
 
+            #region yield keyword
             IEnumerator routine = GetMakingToastRoutine();
 
             Console.WriteLine("routine1");
@@ -306,6 +307,8 @@ namespace Collections
             {
                 _step = -1;
             }
+
+            #endregion
         }
     }
 }
