@@ -6,7 +6,7 @@ namespace Platformer.FSM.Character
     {
         public override CharacterStateID id => CharacterStateID.Move;
 
-        public Move(StateMachine<CharacterStateID> machine) : base(machine)
+        public Move(CharacterMachine machine) : base(machine)
         {
 
         }
@@ -14,6 +14,8 @@ namespace Platformer.FSM.Character
         public override void OnStateEnter()
         {
             base.OnStateEnter();
+            controller.isDirectionChangeable = true;
+            controller.isMovable = true;
             animator.Play("Move");
         }
 
@@ -26,6 +28,9 @@ namespace Platformer.FSM.Character
 
             if (controller.horizontal == 0.0f)
                 nextID = CharacterStateID.Idle;
+
+            if (controller.isGrounded == false)
+                nextID = CharacterStateID.Fall;
 
             return nextID;
         }

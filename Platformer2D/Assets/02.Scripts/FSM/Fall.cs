@@ -2,14 +2,17 @@
 
 namespace Platformer.FSM.Character
 {
-    public class Idle : CharacterStateBase
+    public class Fall : CharacterStateBase
     {
-        public override CharacterStateID id => CharacterStateID.Idle;
-
+        public override CharacterStateID id => CharacterStateID.Fall;
+        public override bool canExecute => base.canExecute &&
+                                            (machine.currentStateID == CharacterStateID.Idle ||
+                                             machine.currentStateID == CharacterStateID.Move ||
+                                             machine.currentStateID == CharacterStateID.Jump);
 
         // 기반타입이 생성자 오버로드를 가지면,
         // 하위타입에서도 해당 오버로드에 인자를 전달할 수 있도록 파라미터를 가지는 오버로드가 필요
-        public Idle(CharacterMachine machine) : base(machine)
+        public Fall(CharacterMachine machine) : base(machine)
         {
 
         }
@@ -18,8 +21,8 @@ namespace Platformer.FSM.Character
         {
             base.OnStateEnter();
             controller.isDirectionChangeable = true;
-            controller.isMovable = true;
-            animator.Play("Idle");
+            controller.isMovable = false;
+            animator.Play("Fall");
         }
 
         public override CharacterStateID OnStateUpdate()
@@ -29,11 +32,8 @@ namespace Platformer.FSM.Character
             if (nextID == CharacterStateID.None)
                 return id;
 
-            if (Mathf.Abs(controller.horizontal) > 0.0f)
-                nextID = CharacterStateID.Move;
-
-            if (controller.isGrounded == false)
-                nextID = CharacterStateID.Fall;
+            if (controller.isGrounded)
+                nextID = CharacterStateID.Idle;
 
             return nextID;
         }
