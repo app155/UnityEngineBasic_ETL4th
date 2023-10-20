@@ -9,6 +9,8 @@ namespace Platformer.FSM
 
         public virtual bool canExecute => true;
 
+        private bool _hasFixedUpdated;
+
         public StateBase(StateMachine<T> machine)
         {
 
@@ -16,7 +18,7 @@ namespace Platformer.FSM
 
         public virtual void OnStateEnter()
         {
-
+            _hasFixedUpdated = false;
         }
 
         public virtual void OnStateExit()
@@ -26,12 +28,13 @@ namespace Platformer.FSM
 
         public virtual void OnStateFixedUpdate()
         {
-
+            if (_hasFixedUpdated == false)
+                _hasFixedUpdated = true;
         }
 
         public virtual T OnStateUpdate()
         {
-            return id;
+            return _hasFixedUpdated ? id : default(T); // default -> None 반환
         }
     }
 }

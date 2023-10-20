@@ -2,19 +2,18 @@
 
 namespace Platformer.FSM.Character
 {
-    public class Jump : CharacterStateBase
+    public class DoubleJump : CharacterStateBase
     {
-        public override CharacterStateID id => CharacterStateID.Jump;
+        public override CharacterStateID id => CharacterStateID.DoubleJump;
         public override bool canExecute => base.canExecute &&
-                                            controller.hasJumped == false &&
-                                            (machine.currentStateID == CharacterStateID.Idle ||
-                                             machine.currentStateID == CharacterStateID.Move) &&
-                                            controller.isGrounded;
+                                            controller.hasDoubleJumped == false &&
+                                            (machine.currentStateID == CharacterStateID.Jump ||
+                                             machine.currentStateID == CharacterStateID.Fall);
         private float _jumpForce;
 
         // 기반타입이 생성자 오버로드를 가지면,
         // 하위타입에서도 해당 오버로드에 인자를 전달할 수 있도록 파라미터를 가지는 오버로드가 필요
-        public Jump(CharacterMachine machine, float jumpForce)
+        public DoubleJump(CharacterMachine machine, float jumpForce)
             : base(machine)
         {
             _jumpForce = jumpForce;
@@ -26,7 +25,7 @@ namespace Platformer.FSM.Character
             controller.isDirectionChangeable = true;
             controller.isMovable = false;
             controller.hasJumped = true;
-            controller.hasDoubleJumped = false;
+            controller.hasDoubleJumped = true;
             animator.Play("Jump");
             rigidbody.velocity = new Vector2(rigidbody.velocity.x, 0.0f);
             rigidbody.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
