@@ -14,7 +14,7 @@ namespace Platformer.FSM.Character
         public Die(CharacterMachine machine)
             : base(machine)
         {
-            
+            controller.onHpMin += ChangeStateToDie;
         }
 
         public override void OnStateEnter()
@@ -26,6 +26,11 @@ namespace Platformer.FSM.Character
             controller.hasDoubleJumped = true;
             controller.Stop();
             animator.Play("Die");
+        }
+
+        public void ChangeStateToDie()
+        {
+            machine.ChangeState(CharacterStateID.Die);
         }
     }
 }

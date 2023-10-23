@@ -148,23 +148,14 @@ namespace Platformer.Controllers
 
             set
             {
-                if (value == _invincible)
-                    return;
-
-                if (value == false)
-                {
-                    _elapsedInvincibleTime = 0.0f;
-                }
-
                 _invincible = value;
             }
         }
 
         [SerializeField] private float _hp;
         [SerializeField] private float _hpMax;
-        private bool _invincible;
+        private bool _invincible = false;
         [SerializeField] private float _invincibleTime;
-        private float _elapsedInvincibleTime;
         public event Action<float> onHpChanged;
         public event Action<float> onHpRecovered;
         public event Action<float> onHpDepleted;
@@ -291,12 +282,18 @@ namespace Platformer.Controllers
         {
             subject.hpValue -= amount;
 
-            onHpDepleted?.Invoke(amount);
+            if (hpValue > hpMin)
+                onHpDepleted?.Invoke(amount);
+
+            else
+                onHpMin?.Invoke();
         }
 
         public void RecoverHp(IHp subject, float amount)
         {
             subject.hpValue += amount;
+
+            onHpRecovered?.Invoke(amount);
         }
     }
 }

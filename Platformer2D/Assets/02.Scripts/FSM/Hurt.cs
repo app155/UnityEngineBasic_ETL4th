@@ -8,12 +8,13 @@ namespace Platformer.FSM.Character
     public class Hurt : CharacterStateBase
     {
         public override CharacterStateID id => CharacterStateID.Hurt;
-        public override bool canExecute => base.canExecute;
+        public override bool canExecute => base.canExecute &&
+                                            machine.currentStateID != CharacterStateID.Die;
 
         public Hurt(CharacterMachine machine)
             : base(machine)
         {
-            
+            controller.onHpDepleted += (value) => ChangeStateToHurt();
         }
 
         public override void OnStateEnter()
@@ -39,10 +40,15 @@ namespace Platformer.FSM.Character
             if (nextID == CharacterStateID.None)
                 return id;
 
-            nextID = CharacterStateID.Idle;
+            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+                nextID = CharacterStateID.Idle;
 
             return nextID;
         }
 
+        public void ChangeStateToHurt()
+        {
+            machine.ChangeState(CharacterStateID.Hurt);
+        }    
     }
 }
