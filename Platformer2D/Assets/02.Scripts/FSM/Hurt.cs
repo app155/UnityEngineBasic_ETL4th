@@ -13,7 +13,7 @@ namespace Platformer.FSM.Character
         public Hurt(CharacterMachine machine)
             : base(machine)
         {
-
+            
         }
 
         public override void OnStateEnter()
@@ -39,10 +39,10 @@ namespace Platformer.FSM.Character
             if (nextID == CharacterStateID.None)
                 return id;
 
-            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
-                nextID = CharacterStateID.Idle;
+            nextID = CharacterStateID.Idle;
 
             return nextID;
         }
+
     }
 }

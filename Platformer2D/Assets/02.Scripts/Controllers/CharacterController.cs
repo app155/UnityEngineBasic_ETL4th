@@ -160,7 +160,7 @@ namespace Platformer.Controllers
             }
         }
 
-        private float _hp;
+        [SerializeField] private float _hp;
         [SerializeField] private float _hpMax;
         private bool _invincible;
         [SerializeField] private float _invincibleTime;
@@ -287,16 +287,16 @@ namespace Platformer.Controllers
             Gizmos.DrawLine(wallBottomCastCenter, wallBottomCastCenter + Vector2.right * _wallDetectDistance * _direction);
         }
 
-        public void RecoverHp(object subject, float amount)
+        public void DepleteHp(IHp subject, float amount)
         {
-            hpValue += amount;
-            onHpRecovered?.Invoke(amount);
+            subject.hpValue -= amount;
+
+            onHpDepleted?.Invoke(amount);
         }
 
-        public void DepleteHp(object subject, float amount)
+        public void RecoverHp(IHp subject, float amount)
         {
-            hpValue -= amount;
-            onHpDepleted?.Invoke(amount);
+            subject.hpValue += amount;
         }
     }
 }

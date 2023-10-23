@@ -7,10 +7,10 @@ namespace Platformer.FSM.Character
         public override CharacterStateID id => CharacterStateID.Jump;
         public override bool canExecute => base.canExecute &&
                                             controller.hasJumped == false &&
+                                            machine.currentStateID == CharacterStateID.WallSlide ||
                                             ((machine.currentStateID == CharacterStateID.Idle ||
-                                              machine.currentStateID == CharacterStateID.Move) ||
-                                              (machine.currentStateID == CharacterStateID.WallSlide ||
-                                              controller.isGrounded));
+                                              machine.currentStateID == CharacterStateID.Move) &&
+                                              controller.isGrounded);
         private float _jumpForce;
 
         // 기반타입이 생성자 오버로드를 가지면,

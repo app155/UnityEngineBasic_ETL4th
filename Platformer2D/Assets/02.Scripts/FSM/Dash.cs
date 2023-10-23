@@ -9,22 +9,24 @@ namespace Platformer.FSM.Character
     // 애니메이션 종료시 Idle
 
     // + a
-    // 생성자에서 대시 거리 받고, 애니메이션 시간에 거쳐 해당 거리 이동
+    // 생성자에서 대시 거리 받고, 애니메이션 시간에 걸쳐 해당 거리 이동
     // animator.GetCurrentAnimatorClipinfo(0)
 
     public class Dash : CharacterStateBase
     {
         public override CharacterStateID id => CharacterStateID.Dash;
         public override bool canExecute => base.canExecute &&
-                                            machine.currentStateID == CharacterStateID.Fall &&
+                                            (machine.currentStateID == CharacterStateID.Idle ||
+                                             machine.currentStateID == CharacterStateID.Move) &&
                                             controller.isGrounded;
 
+        private int _step;
         private Vector2 _dashDistance;
 
-        public Dash(CharacterMachine machine, Vector2 dashDistance)
+        public Dash(CharacterMachine machine, float dashDistance)
             : base(machine)
         {
-            _dashDistance = dashDistance;
+            _dashDistance = new Vector2(dashDistance, 0.0f);
         }
 
         public override void OnStateEnter()
@@ -33,8 +35,15 @@ namespace Platformer.FSM.Character
             controller.isDirectionChangeable = false;
             controller.isMovable = false;
             controller.Stop();
+            _step = 0;
             // rigidbody.AddForce(_dashDistance, ForceMode2D.Impulse);
             animator.Play("Dash");
+        }
+
+        public override void OnStateExit()
+        {
+            base.OnStateExit();
+            controller.Stop();
         }
 
         public override CharacterStateID OnStateUpdate()
@@ -44,16 +53,34 @@ namespace Platformer.FSM.Character
             if (nextID == CharacterStateID.None)
                 return id;
 
-            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
+            switch (_step)
             {
+                case 1:
+                    nextID = CharacterStateID.Idle;
+                    break;
 
-                return id;
+                default:
+                    break;
             }
-
-
-            nextID = CharacterStateID.Idle;
-
             return nextID;
+        }
+
+        public override void OnStateFixedUpdate()
+        {
+            base.OnStateFixedUpdate();
+
+            switch (_step)
+            {
+                case 0:
+                    if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
+                        rigidbody.position += Vector2.right * controller.direction * _dashDistance / animator.GetCurrentAnimatorStateInfo(0).length * Time.fixedDeltaTime;
+                    else
+                        _step++;
+                    break;
+
+                default:
+                    break;
+            }
         }
     }
 }

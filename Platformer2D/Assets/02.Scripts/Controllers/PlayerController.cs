@@ -10,8 +10,10 @@ namespace Platformer.Controllers
 
         public override float vertical => Input.GetAxis("Vertical");
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
+
             machine = new PlayerMachine(this);
             var machineData = StateMachineDataSheet.GetPlayerData(machine);
             machine.Init(machineData);
@@ -21,9 +23,8 @@ namespace Platformer.Controllers
         {
             base.Update();
 
-            // Test
-            if (Input.GetKeyDown(KeyCode.Z))
-                machine.ChangeState(CharacterStateID.Hurt);
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+                machine.ChangeState(CharacterStateID.Dash);
 
             if (Input.GetKey(KeyCode.LeftAlt))
             {
