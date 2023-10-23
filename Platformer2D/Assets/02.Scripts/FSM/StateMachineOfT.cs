@@ -11,6 +11,7 @@ namespace Platformer.FSM
         where T : Enum
     {
         public T currentStateID;
+        public T previousStateID;
         protected Dictionary<T, IState<T>> states;
         private bool _isDirty;
 
@@ -50,6 +51,7 @@ namespace Platformer.FSM
 
             _isDirty = true;
             states[currentStateID].OnStateExit();
+            previousStateID = currentStateID;
             currentStateID = newStateID;
             states[currentStateID].OnStateEnter();
             return true;

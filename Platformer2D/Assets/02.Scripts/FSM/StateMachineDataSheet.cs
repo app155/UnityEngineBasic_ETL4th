@@ -17,6 +17,8 @@ namespace Platformer.FSM
                 { CharacterStateID.DownJump, new DownJump(machine) },
                 { CharacterStateID.Crouch, new Crouch(machine) },
                 { CharacterStateID.Land, new Land(machine) },
+                { CharacterStateID.WallSlide, new WallSlide(machine) },
+                { CharacterStateID.Hurt, new Hurt(machine, 0.8f) },
             };
         }
     }

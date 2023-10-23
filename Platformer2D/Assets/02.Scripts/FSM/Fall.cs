@@ -10,7 +10,8 @@ namespace Platformer.FSM.Character
                                              machine.currentStateID == CharacterStateID.Move ||
                                              machine.currentStateID == CharacterStateID.Jump ||
                                              machine.currentStateID == CharacterStateID.DoubleJump ||
-                                             machine.currentStateID == CharacterStateID.DownJump);
+                                             machine.currentStateID == CharacterStateID.DownJump ||
+                                             machine.currentStateID == CharacterStateID.WallSlide);
 
         private float _landingDistance;
         private float _fallStartPosY;

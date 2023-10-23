@@ -21,6 +21,10 @@ namespace Platformer.Controllers
         {
             base.Update();
 
+            // Test
+            if (Input.GetKeyDown(KeyCode.Z))
+                machine.ChangeState(CharacterStateID.Hurt);
+
             if (Input.GetKey(KeyCode.LeftAlt))
             {
                 if (machine.ChangeState(CharacterStateID.DownJump) == false &&
@@ -29,6 +33,17 @@ namespace Platformer.Controllers
                 {
                     machine.ChangeState(CharacterStateID.DoubleJump);
                 }
+            }
+
+            if (Input.GetKey(KeyCode.RightArrow) ||
+                Input.GetKey(KeyCode.LeftArrow))
+            {
+                machine.ChangeState(CharacterStateID.WallSlide);
+            }
+
+            else if (machine.currentStateID == CharacterStateID.WallSlide)
+            {
+                machine.ChangeState(CharacterStateID.Idle);
             }
 
             if (Input.GetKeyDown(KeyCode.DownArrow))

@@ -26,8 +26,9 @@ namespace Platformer.FSM.Character
             controller.isMovable = false;
             controller.hasJumped = true;
             controller.hasDoubleJumped = true;
+            controller.Stop();
             animator.Play("Jump");
-            rigidbody.velocity = new Vector2(rigidbody.velocity.x, 0.0f);
+            rigidbody.velocity = new Vector2(controller.horizontal * controller.moveSpeed, 0.0f);
             rigidbody.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
         }
 
