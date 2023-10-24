@@ -9,16 +9,23 @@ namespace Platformer.FSM.Character
     {
         public override CharacterStateID id => CharacterStateID.Slide;
         public override bool canExecute => base.canExecute &&
-                                            (machine.currentStateID != CharacterStateID.Hurt ||
-                                             machine.currentStateID != CharacterStateID.Land);
+                                            machine.currentStateID == CharacterStateID.Crouch;
 
         private float _distance;
         private Vector3 _startPosition;
         private Vector3 _targetPosition;
+        private Vector2 _originalColliderOffset;
+        private Vector2 _originalColliderSize;
+        private Vector2 _slideColliderOffset;
+        private Vector2 _slideColliderSize;
 
-        public Slide(CharacterMachine machine, float distance)
+        public Slide(CharacterMachine machine, Vector2 slideColliderOffset, Vector2 slideColliderSize, float distance)
             : base(machine)
         {
+            _originalColliderOffset = trigger.offset;
+            _originalColliderSize = trigger.size;
+            _slideColliderOffset = slideColliderOffset;
+            _slideColliderSize = slideColliderSize;
             _distance = distance;
         }
 
@@ -28,6 +35,8 @@ namespace Platformer.FSM.Character
             controller.isDirectionChangeable = false;
             controller.isMovable = false;
             controller.Stop();
+            collision.offset = trigger.offset = _slideColliderOffset;
+            collision.size = trigger.size = _slideColliderSize;
             rigidbody.bodyType = RigidbodyType2D.Kinematic;
             _startPosition = transform.position;
             _targetPosition = transform.position + Vector3.right * controller.direction * _distance;
@@ -38,6 +47,10 @@ namespace Platformer.FSM.Character
         public override void OnStateExit()
         {
             base.OnStateExit();
+
+            collision.offset = trigger.offset = _originalColliderOffset;
+            collision.size = trigger.size = _originalColliderSize;
+
             rigidbody.bodyType = RigidbodyType2D.Dynamic;
         }
 
