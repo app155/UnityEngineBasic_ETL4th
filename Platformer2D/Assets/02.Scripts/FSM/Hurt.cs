@@ -9,12 +9,21 @@ namespace Platformer.FSM.Character
     {
         public override CharacterStateID id => CharacterStateID.Hurt;
         public override bool canExecute => base.canExecute &&
-                                            machine.currentStateID != CharacterStateID.Die;
+                                            (machine.currentStateID == CharacterStateID.Idle ||
+                                             machine.currentStateID == CharacterStateID.Move ||
+                                             machine.currentStateID == CharacterStateID.Jump ||
+                                             machine.currentStateID == CharacterStateID.DoubleJump ||
+                                             machine.currentStateID == CharacterStateID.DownJump ||
+                                             machine.currentStateID == CharacterStateID.Fall ||
+                                             machine.currentStateID == CharacterStateID.Land ||
+                                             machine.currentStateID == CharacterStateID.Crouch ||
+                                             machine.currentStateID == CharacterStateID.WallSlide ||
+                                             machine.currentStateID == CharacterStateID.Dash);
 
         public Hurt(CharacterMachine machine)
             : base(machine)
         {
-            controller.onHpDepleted += (value) => ChangeStateToHurt();
+
         }
 
         public override void OnStateEnter()
@@ -22,8 +31,6 @@ namespace Platformer.FSM.Character
             base.OnStateEnter();
             controller.isDirectionChangeable = false;
             controller.isMovable = false;
-            controller.hasJumped = true;
-            controller.hasDoubleJumped = true;
             controller.Stop();
             animator.Play("Hurt");
         }
@@ -45,10 +52,5 @@ namespace Platformer.FSM.Character
 
             return nextID;
         }
-
-        public void ChangeStateToHurt()
-        {
-            machine.ChangeState(CharacterStateID.Hurt);
-        }    
     }
 }

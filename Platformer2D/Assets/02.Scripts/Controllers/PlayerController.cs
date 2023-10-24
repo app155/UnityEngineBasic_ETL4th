@@ -17,14 +17,18 @@ namespace Platformer.Controllers
             machine = new PlayerMachine(this);
             var machineData = StateMachineDataSheet.GetPlayerData(machine);
             machine.Init(machineData);
+            onHpDepleted += (amount) => machine.ChangeState(CharacterStateID.Hurt);
+            onHpMin += () => machine.ChangeState(CharacterStateID.Die);
         }
 
         protected override void Update()
         {
             base.Update();
 
-            if (Input.GetKeyDown(KeyCode.LeftShift))
-                machine.ChangeState(CharacterStateID.Dash);
+            if (isUpLadderDetected && Input.GetKey(KeyCode.UpArrow))
+            {
+                machine.ChangeState(CharacterStateID.LadderUp);
+            }
 
             if (Input.GetKey(KeyCode.LeftAlt))
             {
@@ -57,6 +61,9 @@ namespace Platformer.Controllers
                 if (machine.currentStateID == CharacterStateID.Crouch)
                     machine.ChangeState(CharacterStateID.Idle);
             }
+
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+                machine.ChangeState(CharacterStateID.Dash);
 
             //if (Input.GetKeyDown(KeyCode.LeftAlt))
             //{

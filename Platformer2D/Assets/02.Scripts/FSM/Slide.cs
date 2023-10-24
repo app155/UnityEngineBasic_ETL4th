@@ -3,18 +3,11 @@ using UnityEngine;
 
 namespace Platformer.FSM.Character
 {
-    // LShift
-    // Idle, Move, Jump, DownJump, DoubleJump, Fall -> Dash
-    // 현재 바라보는 방향 AddForce
-    // 애니메이션 종료시 Idle
+    // Crouch + Dash
 
-    // + a
-    // 생성자에서 대시 거리 받고, 애니메이션 시간에 걸쳐 해당 거리 이동
-    // animator.GetCurrentAnimatorClipinfo(0)
-
-    public class Dash : CharacterStateBase
+    public class Slide : CharacterStateBase
     {
-        public override CharacterStateID id => CharacterStateID.Dash;
+        public override CharacterStateID id => CharacterStateID.Slide;
         public override bool canExecute => base.canExecute &&
                                             (machine.currentStateID != CharacterStateID.Hurt ||
                                              machine.currentStateID != CharacterStateID.Land);
@@ -23,7 +16,7 @@ namespace Platformer.FSM.Character
         private Vector3 _startPosition;
         private Vector3 _targetPosition;
 
-        public Dash(CharacterMachine machine, float distance)
+        public Slide(CharacterMachine machine, float distance)
             : base(machine)
         {
             _distance = distance;
@@ -39,7 +32,7 @@ namespace Platformer.FSM.Character
             _startPosition = transform.position;
             _targetPosition = transform.position + Vector3.right * controller.direction * _distance;
             
-            animator.Play("Dash");
+            animator.Play("Slide");
         }
 
         public override void OnStateExit()

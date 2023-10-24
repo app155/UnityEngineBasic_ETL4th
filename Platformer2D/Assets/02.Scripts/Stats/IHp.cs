@@ -20,7 +20,7 @@ namespace Platformer.Stats
         public event Action onHpMax;
         public event Action onHpMin;
 
-        public void RecoverHp(IHp subject, float amount);
-        public void DepleteHp(IHp subject, float amount);
+        public void RecoverHp(object subject, float amount);
+        public void DepleteHp(object subject, float amount);
     }
 }

@@ -14,7 +14,7 @@ namespace Platformer.FSM.Character
         public Die(CharacterMachine machine)
             : base(machine)
         {
-            controller.onHpMin += ChangeStateToDie;
+
         }
 
         public override void OnStateEnter()
@@ -22,15 +22,23 @@ namespace Platformer.FSM.Character
             base.OnStateEnter();
             controller.isDirectionChangeable = false;
             controller.isMovable = false;
-            controller.hasJumped = true;
-            controller.hasDoubleJumped = true;
             controller.Stop();
+            controller.enabled = false;
+            trigger.enabled = false;
             animator.Play("Die");
         }
 
-        public void ChangeStateToDie()
+        public override CharacterStateID OnStateUpdate()
         {
-            machine.ChangeState(CharacterStateID.Die);
+            CharacterStateID nextID = base.OnStateUpdate();
+
+            if (nextID == CharacterStateID.None)
+                return id;
+
+            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+                GameObject.Destroy(controller.gameObject);
+
+            return nextID;
         }
     }
 }

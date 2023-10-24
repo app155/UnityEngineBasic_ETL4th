@@ -1,4 +1,5 @@
 using Platformer.FSM;
+using Platformer.GameElements;
 using Platformer.Stats;
 using System;
 using System.Collections;
@@ -51,8 +52,7 @@ namespace Platformer.Controllers
         [SerializeField] private float _moveSpeed;
         protected Rigidbody2D rigidbody;
 
-
-        // Ground Detection
+        #region Ground Detection
         public bool isGrounded
         {
             get
@@ -93,9 +93,9 @@ namespace Platformer.Controllers
         [SerializeField] private Vector2 _groundDetectSize;
         [SerializeField] private float _groundBelowDetectDistance;
         [SerializeField] private LayerMask _groundMask;
+        #endregion
 
-
-        // Wall Detection
+        #region Wall Detection
         public bool isWallDetected
         {
             get
@@ -112,6 +112,57 @@ namespace Platformer.Controllers
 
         [SerializeField] private LayerMask _wallMask;
         [SerializeField] private float _wallDetectDistance;
+        #endregion
+
+        #region Ladder Detection
+
+        public bool isUpLadderDetected
+        {
+            get
+            {
+                Collider2D col = Physics2D.OverlapCircle(transform.position + Vector3.up * _ladderUpDetectOffset,
+                                                        _ladderDetectRadius,
+                                                        _ladderMask);
+
+                if (col)
+                {
+                    upLadder = col.GetComponent<Ladder>();
+                    return true;
+                }
+
+                upLadder = null;
+                return false;
+            }
+        }
+
+        public bool isDownLadderDetected
+        {
+            get
+            {
+                Collider2D col = Physics2D.OverlapCircle(transform.position + Vector3.down * _ladderDownDetectOffset,
+                                                        _ladderDetectRadius,
+                                                        _ladderMask);
+
+                if (col)
+                {
+                    downLadder = col.GetComponent<Ladder>();
+                    return true;
+                }
+
+                downLadder = null;
+                return false;
+            }
+        }
+
+        public Ladder upLadder;
+        public Ladder downLadder;
+        [SerializeField] private float _ladderUpDetectOffset;
+        [SerializeField] private float _ladderDownDetectOffset;
+        [SerializeField] private float _ladderDetectRadius;
+        [SerializeField] private LayerMask _ladderMask;
+
+
+        #endregion
 
         public float hpValue
         {
@@ -152,7 +203,7 @@ namespace Platformer.Controllers
             }
         }
 
-        [SerializeField] private float _hp;
+        private float _hp;
         [SerializeField] private float _hpMax;
         private bool _invincible = false;
         [SerializeField] private float _invincibleTime;
@@ -224,6 +275,7 @@ namespace Platformer.Controllers
             DrawGroundDetectGizmos();
             DrawGroundBelowDetectGizmos();
             DrawWallDetectGizmos();
+            DrawLadderDetectGizmos();
         }
 
         private void DrawGroundDetectGizmos()
@@ -278,9 +330,18 @@ namespace Platformer.Controllers
             Gizmos.DrawLine(wallBottomCastCenter, wallBottomCastCenter + Vector2.right * _wallDetectDistance * _direction);
         }
 
-        public void DepleteHp(IHp subject, float amount)
+        private void DrawLadderDetectGizmos()
         {
-            subject.hpValue -= amount;
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawSphere(transform.position + Vector3.up * _ladderUpDetectOffset, _ladderDetectRadius);
+
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawSphere(transform.position + Vector3.down * _ladderDownDetectOffset, _ladderDetectRadius);
+        }
+
+        public void DepleteHp(object subject, float amount)
+        {
+            hpValue -= amount;
 
             if (hpValue > hpMin)
                 onHpDepleted?.Invoke(amount);
@@ -289,9 +350,9 @@ namespace Platformer.Controllers
                 onHpMin?.Invoke();
         }
 
-        public void RecoverHp(IHp subject, float amount)
+        public void RecoverHp(object subject, float amount)
         {
-            subject.hpValue += amount;
+            hpValue += amount;
 
             onHpRecovered?.Invoke(amount);
         }
