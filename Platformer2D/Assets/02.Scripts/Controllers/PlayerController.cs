@@ -25,13 +25,6 @@ namespace Platformer.Controllers
         {
             base.Update();
 
-            if (Input.GetKey(KeyCode.UpArrow))
-            {
-                if (machine.ChangeState(CharacterStateID.LadderUp))
-                {
-
-                }
-            }
 
             if (Input.GetKey(KeyCode.LeftAlt))
             {
@@ -54,12 +47,19 @@ namespace Platformer.Controllers
                 machine.ChangeState(CharacterStateID.Idle);
             }
 
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                machine.ChangeState(CharacterStateID.UpLadderClimb);
+            }
+
             if (Input.GetKey(KeyCode.DownArrow))
             {
-                if (machine.ChangeState(CharacterStateID.LadderDown) == false && machine.ChangeState(CharacterStateID.Crouch) == false)
-                {
+                machine.ChangeState(CharacterStateID.DownLadderClimb);
+            }
 
-                }
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                machine.ChangeState(CharacterStateID.Crouch);
             }
 
             else if (Input.GetKeyUp(KeyCode.DownArrow))
@@ -70,11 +70,11 @@ namespace Platformer.Controllers
 
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
-                if (machine.ChangeState(CharacterStateID.Slide) && machine.ChangeState(CharacterStateID.Dash))
-                {
-
-                }
+                machine.ChangeState(CharacterStateID.Dash);
             }
+
+            if (Input.GetKeyDown(KeyCode.X))
+                machine.ChangeState(CharacterStateID.Slide);
                 
 
             //if (Input.GetKeyDown(KeyCode.LeftAlt))

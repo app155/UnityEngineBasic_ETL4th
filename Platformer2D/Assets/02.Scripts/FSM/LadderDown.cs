@@ -74,7 +74,7 @@ namespace Platformer.FSM.Character
                 animator.speed = 0;
 
 
-            if (controller.isGrounded)
+            if (transform.position.y <= _downLadder.downExit.y)
                 nextID = CharacterStateID.Idle;
                 
 
@@ -89,8 +89,9 @@ namespace Platformer.FSM.Character
                 transform.position += Vector3.down * 0.5f * Time.fixedDeltaTime;
 
 
-            if (transform.position.y < _downLadder.downExit.y)
+            if (transform.position.y <= _downLadder.downExit.y)
                 transform.position = _downLadder.downExit;
+                
         }
     }
 }

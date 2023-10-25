@@ -75,7 +75,7 @@ namespace Platformer.FSM.Character
 
             if (controller.isGrounded)
                 nextID = CharacterStateID.Idle;
-                
+
 
             return nextID;
         }

@@ -11,6 +11,9 @@ namespace Platformer.Controllers
 {
     public abstract class CharacterController : MonoBehaviour, IHp
     {
+        public float damageMin;
+        public float damageMax;
+
         public const int DIRECTION_RIGHT = 1;
         public const int DIRECTION_LEFT = -1;
         public int direction
@@ -126,8 +129,11 @@ namespace Platformer.Controllers
 
                 if (col)
                 {
-                    upLadder = col.GetComponent<Ladder>();
-                    return true;
+                    if (col.TryGetComponent(out upLadder))
+                        return true;
+
+                    else
+                        throw new Exception($"CharacterController : {col.name}");
                 }
 
                 upLadder = null;

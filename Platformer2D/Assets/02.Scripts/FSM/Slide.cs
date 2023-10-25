@@ -9,7 +9,10 @@ namespace Platformer.FSM.Character
     {
         public override CharacterStateID id => CharacterStateID.Slide;
         public override bool canExecute => base.canExecute &&
-                                            machine.currentStateID == CharacterStateID.Crouch;
+                                            (machine.currentStateID == CharacterStateID.Idle ||
+                                             machine.currentStateID == CharacterStateID.Move ||
+                                             machine.currentStateID == CharacterStateID.Crouch) &&
+                                             controller.isGrounded;
 
         private float _distance;
         private Vector3 _startPosition;

@@ -24,6 +24,8 @@ namespace Platformer.FSM
                 { CharacterStateID.Die, new Die(machine) },
                 { CharacterStateID.LadderUp, new LadderUp(machine) },
                 { CharacterStateID.LadderDown, new LadderDown(machine) },
+                { CharacterStateID.UpLadderClimb, new UpLadderClimb(machine) },
+                { CharacterStateID.DownLadderClimb, new DownLadderClimb(machine) },
                 { CharacterStateID.Slide, new Slide(machine, new Vector2(0.0f, 0.06f), new Vector2(0.12f, 0.12f), 1.5f) },
             };
         }
