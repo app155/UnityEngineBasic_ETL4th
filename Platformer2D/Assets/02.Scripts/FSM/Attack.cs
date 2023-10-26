@@ -1,5 +1,6 @@
 ﻿using Platformer.Animations;
 using Platformer.Stats;
+using Platformer.Datum;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -49,22 +50,12 @@ namespace Platformer.FSM.Character
         private float _exitTimeMark;
         private bool _hasHit;
 
-        public class AttackSetting
-        {
-            public int targetMax;
-            public LayerMask targetMask;
-            public float damageGain;
-            public Vector2 castCenter;
-            public Vector2 castSize;
-            public float castDistance;
-        }
-
-        private AttackSetting[] _attackSettings;
+        private SkillCastSetting[] _attackSettings;
         private List<IHp> _targets = new List<IHp>();
         private CharacterAnimationEvents _animationEvents;
 
 
-        public Attack(CharacterMachine machine, AttackSetting[] attackSettings, float comboResetTime)
+        public Attack(CharacterMachine machine, float comboResetTime, SkillCastSetting[] attackSettings)
             : base(machine)
         {
             _attackSettings = attackSettings;
@@ -81,7 +72,7 @@ namespace Platformer.FSM.Character
 
                     float damage = Random.Range(controller.damageMin, controller.damageMax) * _attackSettings[_comboStack - 1].damageGain;
 
-                    target.DepleteHp(controller, damage);
+                    target.DepleteHp(transform, damage);
                 }
 
                 _hasHit = true;
@@ -96,7 +87,7 @@ namespace Platformer.FSM.Character
             controller.isMovable = controller.isGrounded;
             _hasHit = false;
 
-            AttackSetting setting = _attackSettings[_comboStack];
+            SkillCastSetting setting = _attackSettings[_comboStack];
             RaycastHit2D[] hits =
                 Physics2D.BoxCastAll(origin: rigidbody.position + new Vector2(setting.castCenter.x * controller.direction, setting.castCenter.y),
                                      size: setting.castSize,
@@ -108,18 +99,6 @@ namespace Platformer.FSM.Character
             Vector2 origin = rigidbody.position + new Vector2(setting.castCenter.x * controller.direction, setting.castCenter.y);
             Vector2 size = setting.castSize;
             float distance = setting.castDistance;
-
-            Debug.DrawLine(origin + new Vector2(-size.x / 2.0f * controller.direction, +size.y / 2.0f),
-                           origin + new Vector2(+size.x / 2.0f * controller.direction, +size.y / 2.0f) + Vector2.right * controller.direction * distance);
-
-            Debug.DrawLine(origin + new Vector2(-size.x / 2.0f * controller.direction, -size.y / 2.0f),
-                           origin + new Vector2(+size.x / 2.0f * controller.direction, -size.y / 2.0f) + Vector2.right * controller.direction * distance);
-
-            Debug.DrawLine(origin + new Vector2(-size.x / 2.0f * controller.direction, +size.y / 2.0f),
-                           origin + new Vector2(-size.x / 2.0f * controller.direction, -size.y / 2.0f));
-
-            Debug.DrawLine(origin + new Vector2(+size.x / 2.0f * controller.direction, +size.y / 2.0f) + Vector2.right * controller.direction * distance,
-                           origin + new Vector2(+size.x / 2.0f * controller.direction, -size.y / 2.0f) + Vector2.right * controller.direction * distance);
 
             _targets.Clear();
 
@@ -134,6 +113,26 @@ namespace Platformer.FSM.Character
 
             animator.SetFloat("comboStack", _comboStack++);
             animator.Play("Attack");
+
+            Debug.DrawLine(origin + new Vector2(-size.x / 2.0f * controller.direction, +size.y / 2.0f),
+               origin + new Vector2(+size.x / 2.0f * controller.direction, +size.y / 2.0f) + Vector2.right * controller.direction * distance,
+               Color.red,
+               animator.GetCurrentAnimatorStateInfo(0).length);
+
+            Debug.DrawLine(origin + new Vector2(-size.x / 2.0f * controller.direction, -size.y / 2.0f),
+                           origin + new Vector2(+size.x / 2.0f * controller.direction, -size.y / 2.0f) + Vector2.right * controller.direction * distance,
+                           Color.red,
+                           animator.GetCurrentAnimatorStateInfo(0).length);
+
+            Debug.DrawLine(origin + new Vector2(-size.x / 2.0f * controller.direction, +size.y / 2.0f),
+                           origin + new Vector2(-size.x / 2.0f * controller.direction, -size.y / 2.0f),
+                           Color.red,
+                           animator.GetCurrentAnimatorStateInfo(0).length);
+
+            Debug.DrawLine(origin + new Vector2(+size.x / 2.0f * controller.direction, +size.y / 2.0f) + Vector2.right * controller.direction * distance,
+                           origin + new Vector2(+size.x / 2.0f * controller.direction, -size.y / 2.0f) + Vector2.right * controller.direction * distance,
+                           Color.red,
+                           animator.GetCurrentAnimatorStateInfo(0).length);
         }
 
         public override void OnStateExit()

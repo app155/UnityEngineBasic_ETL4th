@@ -10,6 +10,17 @@ namespace Platformer.Controllers
 
         public override float vertical => Input.GetAxis("Vertical");
 
+        private float _invincibleTimer;
+
+        public void SetInvincible(float duration)
+        {
+            if (duration < _invincibleTimer)
+                return;
+
+            _invincibleTimer = duration;
+            invincible = true;
+        }
+
         protected override void Start()
         {
             base.Start();
@@ -24,6 +35,14 @@ namespace Platformer.Controllers
         protected override void Update()
         {
             base.Update();
+
+            if (_invincibleTimer > 0)
+            {
+                _invincibleTimer -= Time.deltaTime;
+
+                if (_invincibleTimer <= 0)
+                    invincible = false;
+            }
 
 
             if (Input.GetKey(KeyCode.LeftAlt))
@@ -74,17 +93,25 @@ namespace Platformer.Controllers
             }
 
             if (Input.GetKeyDown(KeyCode.X))
+            {
                 machine.ChangeState(CharacterStateID.Slide);
+            }
                 
+            if (Input.GetKey(KeyCode.LeftControl))
+            {
+                machine.ChangeState(CharacterStateID.Attack);
+            }
+        }
 
-            //if (Input.GetKeyDown(KeyCode.LeftAlt))
-            //{
-            //    if (machine.ChangeState(CharacterStateID.Jump) == false &&
-            //        machine.ChangeState(CharacterStateID.DoubleJump) == false)
-            //    {
+        public override void DepleteHp(object subject, float amount)
+        {
+            base.DepleteHp(subject, amount);
 
-            //    }
-            //}
+            SetInvincible(0.7f);
+
+            if (subject.GetType().Equals(typeof(Transform)))
+                Knockback(Vector2.right * (((Transform)subject).position.x - transform.position.x < 0 ? 1.0f : -1.0f) * 1.0f
+                          + Vector2.up * 1.0f);
         }
     }
 }

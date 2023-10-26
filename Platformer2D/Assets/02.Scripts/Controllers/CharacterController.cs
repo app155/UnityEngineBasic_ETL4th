@@ -199,20 +199,10 @@ namespace Platformer.Controllers
 
         public float hpMin => 0.0f;
 
-        public bool invincible
-        {
-            get => _invincible;
-
-            set
-            {
-                _invincible = value;
-            }
-        }
+        public bool invincible { get; set; }
 
         private float _hp;
         [SerializeField] private float _hpMax;
-        private bool _invincible = false;
-        [SerializeField] private float _invincibleTime;
         public event Action<float> onHpChanged;
         public event Action<float> onHpRecovered;
         public event Action<float> onHpDepleted;
@@ -224,6 +214,12 @@ namespace Platformer.Controllers
         public bool hasJumped;
         public bool hasDoubleJumped;
         protected CharacterMachine machine;
+
+        public void Knockback(Vector2 force)
+        {
+            rigidbody.velocity = Vector2.zero;
+            rigidbody.AddForce(force, ForceMode2D.Impulse);
+        }
 
         
         public void Stop()
@@ -276,7 +272,7 @@ namespace Platformer.Controllers
         }
 
 
-        private void OnDrawGizmosSelected()
+        protected virtual void OnDrawGizmosSelected()
         {
             DrawGroundDetectGizmos();
             DrawGroundBelowDetectGizmos();
@@ -345,15 +341,11 @@ namespace Platformer.Controllers
             Gizmos.DrawSphere(transform.position + Vector3.down * _ladderDownDetectOffset, _ladderDetectRadius);
         }
 
-        public void DepleteHp(object subject, float amount)
+
+        public virtual void DepleteHp(object subject, float amount)
         {
             hpValue -= amount;
-
-            if (hpValue > hpMin)
-                onHpDepleted?.Invoke(amount);
-
-            else
-                onHpMin?.Invoke();
+            onHpDepleted?.Invoke(amount);
         }
 
         public void RecoverHp(object subject, float amount)
