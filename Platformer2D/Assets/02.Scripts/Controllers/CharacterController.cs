@@ -31,12 +31,14 @@ namespace Platformer.Controllers
                 {
                     _direction = DIRECTION_RIGHT;
                     transform.localScale = new Vector3(DIRECTION_RIGHT, 1.0f, 1.0f);
+                    onDirectionChanged?.Invoke();
                 }
 
                 else if (value < 0)
                 {
                     _direction = DIRECTION_LEFT;
                     transform.localScale = new Vector3(DIRECTION_LEFT, 1.0f, 1.0f);
+                    onDirectionChanged?.Invoke();
                 }
 
                 else
@@ -45,6 +47,7 @@ namespace Platformer.Controllers
         }
         private int _direction;
         public bool isDirectionChangeable;
+        public event Action onDirectionChanged;
 
         public abstract float horizontal { get; }
         public abstract float vertical { get; }

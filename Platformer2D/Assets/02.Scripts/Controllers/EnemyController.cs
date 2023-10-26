@@ -1,5 +1,6 @@
 using Platformer.FSM;
 using Platformer.Stats;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -125,8 +126,6 @@ namespace Platformer.Controllers
 
         protected override void FixedUpdate()
         {
-
-
             base.FixedUpdate();
         }
 
@@ -164,5 +163,6 @@ namespace Platformer.Controllers
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, _attackRange);
         }
+
     }
 }
