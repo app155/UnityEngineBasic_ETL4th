@@ -16,8 +16,12 @@ namespace Platformer.FSM.Character
     {
         public override CharacterStateID id => CharacterStateID.Dash;
         public override bool canExecute => base.canExecute &&
-                                            (machine.currentStateID != CharacterStateID.Hurt ||
-                                             machine.currentStateID != CharacterStateID.Land);
+                                            (machine.currentStateID == CharacterStateID.Idle ||
+                                             machine.currentStateID == CharacterStateID.Move ||
+                                             machine.currentStateID == CharacterStateID.Jump ||
+                                             machine.currentStateID == CharacterStateID.DoubleJump ||
+                                             machine.currentStateID == CharacterStateID.DownJump ||
+                                             machine.currentStateID == CharacterStateID.Fall);
 
         private float _distance;
         private Vector3 _startPosition;

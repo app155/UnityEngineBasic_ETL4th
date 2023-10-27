@@ -1,3 +1,4 @@
+using Platformer.Effects;
 using Platformer.FSM;
 using Platformer.GameElements;
 using Platformer.Stats;
@@ -31,23 +32,23 @@ namespace Platformer.Controllers
                 {
                     _direction = DIRECTION_RIGHT;
                     transform.localScale = new Vector3(DIRECTION_RIGHT, 1.0f, 1.0f);
-                    onDirectionChanged?.Invoke();
                 }
 
                 else if (value < 0)
                 {
                     _direction = DIRECTION_LEFT;
                     transform.localScale = new Vector3(DIRECTION_LEFT, 1.0f, 1.0f);
-                    onDirectionChanged?.Invoke();
                 }
 
                 else
                     throw new System.Exception("[CharacterController] : Wrong direction");
+
+                onDirectionChanged?.Invoke(_direction);
             }
         }
         private int _direction;
         public bool isDirectionChangeable;
-        public event Action onDirectionChanged;
+        public event Action<int> onDirectionChanged;
 
         public abstract float horizontal { get; }
         public abstract float vertical { get; }
@@ -64,7 +65,7 @@ namespace Platformer.Controllers
             get
             {
                 ground = Physics2D.OverlapBox(rigidbody.position + _groundDetectOffset,
-                                                _groundDetectSize, 0.0f, _groundMask);
+                                                _groundDetectSize, 0.0f, groundMask);
 
                 return ground;
             }
@@ -81,7 +82,7 @@ namespace Platformer.Controllers
                                          angle: 0.0f,
                                          direction: Vector2.down,
                                          distance: _groundBelowDetectDistance,
-                                         layerMask: _groundMask);
+                                         layerMask: groundMask);
 
                 RaycastHit2D hit = default;
                 if (hits.Length > 0)
@@ -98,7 +99,7 @@ namespace Platformer.Controllers
         [SerializeField] private Vector2 _groundDetectOffset;
         [SerializeField] private Vector2 _groundDetectSize;
         [SerializeField] private float _groundBelowDetectDistance;
-        [SerializeField] private LayerMask _groundMask;
+        [SerializeField] protected LayerMask groundMask;
         #endregion
 
         #region Wall Detection
@@ -218,6 +219,8 @@ namespace Platformer.Controllers
         public bool hasDoubleJumped;
         protected CharacterMachine machine;
 
+        public PoolOfDamagePopUp poolOfDamagePopUp;
+
         public void Knockback(Vector2 force)
         {
             rigidbody.velocity = Vector2.zero;
@@ -235,11 +238,12 @@ namespace Platformer.Controllers
         {
             rigidbody = GetComponent<Rigidbody2D>();
             _col = GetComponent<CapsuleCollider2D>();
+            hpValue = _hpMax;
         }
 
         protected virtual void Start()
         {
-            hpValue = _hpMax;
+            
         }
 
         protected virtual void Update()
@@ -298,7 +302,7 @@ namespace Platformer.Controllers
                                      angle: 0.0f,
                                      direction: Vector2.down,
                                      distance: _groundBelowDetectDistance,
-                                     layerMask: _groundMask);
+                                     layerMask: groundMask);
 
             RaycastHit2D hit = default;
             if (hits.Length > 0)
@@ -349,6 +353,9 @@ namespace Platformer.Controllers
         {
             hpValue -= amount;
             onHpDepleted?.Invoke(amount);
+            DamagePopUp damagePopUp = poolOfDamagePopUp.pool.Get();
+            damagePopUp.transform.position = transform.position + Vector3.up * 0.1f;
+            damagePopUp.Show(amount);
         }
 
         public void RecoverHp(object subject, float amount)

@@ -51,6 +51,7 @@ namespace Platformer.Controllers
         [SerializeField] private float _behaviourTimeMin;
         [SerializeField] private float _behaviourTimeMax;
         private float _behaviourTimer;
+        [SerializeField] private float _slopeAngle = 45.0f;
 
         private CapsuleCollider2D _trigger;
 
@@ -58,6 +59,7 @@ namespace Platformer.Controllers
         {
             base.Awake();
             _trigger = GetComponent<CapsuleCollider2D>();
+            _ai = AI.Think;
         }
 
         protected override void Update()
@@ -88,37 +90,77 @@ namespace Platformer.Controllers
             switch (_ai)
             {
                 case AI.Think:
+                    {
+                        _ai = AI.ExecuteRandomBehaviour;
+                    }
+
                     break;
                 case AI.ExecuteRandomBehaviour:
+                    {
+                        var nextID = _behaviours[Random.Range(0, _behaviours.Count)];
+
+                        if (machine.ChangeState(nextID))
+                        {
+                            _behaviourTimer = Random.Range(_behaviourTimeMin, _behaviourTimeMax);
+                            _horizontal = Random.Range(-1.0f, 1.0f);
+                            _ai = AI.WaitUntilBehaviour;
+                        }
+
+                        else
+                        {
+                            _ai = AI.Think;
+                        }
+                    }
+                    
                     break;
                 case AI.WaitUntilBehaviour:
-                    break;
-                case AI.Follow:
-                    if (_target == null)
+                    if (_behaviourTimer <= 0)
                     {
                         _ai = AI.Think;
-                        return;
                     }
 
-                    if (_attackEnable && Vector2.Distance(transform.position, _target.position) <= _attackRange)
-                    {
-                        machine.ChangeState(CharacterStateID.Attack);
-                    }
                     else
                     {
-                        machine.ChangeState(CharacterStateID.Move);
-                    }
-
-                    if (transform.position.x < _target.position.x - _trigger.size.x)
-                    {
-                        _horizontal = 1.0f;
-                    }
-                    else if (transform.position.x > _target.position.x + _trigger.size.x)
-                    {
-                        _horizontal = -1.0f;
+                        _behaviourTimer -= Time.deltaTime;
                     }
 
                     break;
+                case AI.Follow:
+                    {
+                        if (_target == null)
+                        {
+                            _ai = AI.Think;
+                            return;
+                        }
+
+                        if (Vector2.Distance(transform.position, _target.position) > _targetDetectRange)
+                        {
+                            _target = null;
+                            _ai = AI.Think;
+                            return;
+                        }
+
+
+                        if (_attackEnable && Vector2.Distance(transform.position, _target.position) <= _attackRange)
+                        {
+                            machine.ChangeState(CharacterStateID.Attack);
+                        }
+                        else
+                        {
+                            machine.ChangeState(CharacterStateID.Move);
+                        }
+
+                        if (transform.position.x < _target.position.x - _trigger.size.x)
+                        {
+                            _horizontal = 1.0f;
+                        }
+                        else if (transform.position.x > _target.position.x + _trigger.size.x)
+                        {
+                            _horizontal = -1.0f;
+                        }
+
+                        break;
+                    }
                 default:
                     break;
             }
@@ -126,7 +168,31 @@ namespace Platformer.Controllers
 
         protected override void FixedUpdate()
         {
-            base.FixedUpdate();
+            if (machine.currentStateID != CharacterStateID.Move)
+            {
+                base.FixedUpdate();
+            }
+
+            else
+            {
+                machine.FixedUpdateState();
+
+                Vector2 expected = rigidbody.position + move * Time.fixedDeltaTime;
+                float distanceX = Mathf.Abs(expected.x - rigidbody.position.x);
+                float height = distanceX * Mathf.Tan(_slopeAngle * Mathf.Deg2Rad);
+                Vector2 origin = expected + Vector2.up * height;
+                RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, height * 2, groundMask);
+
+                Debug.DrawRay(origin, Vector2.down * height * 2, Color.red);
+                Debug.Log(hit);
+
+                if (hit.collider)
+                {
+                    rigidbody.position = hit.point;
+                    Debug.Log(hit.point);
+                }
+            }
+            
         }
 
         public override void DepleteHp(object subject, float amount)
