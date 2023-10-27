@@ -21,7 +21,7 @@ namespace Platformer.Test
 
             if (GUI.Button(new Rect(20.0f, 40.0f, 180.0f, 80.0f), "Hurt"))
             {
-                _controller?.DepleteHp(null, 10.0f);
+                _controller?.DepleteHp(this, 10.0f);
             }
         }
 #endif

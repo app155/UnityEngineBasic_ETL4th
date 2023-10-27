@@ -37,8 +37,27 @@ namespace Platformer.Controllers
 
         public override float vertical => _vertical;
 
+        public bool isGroundForwardExist
+        {
+            get
+            {
+                Vector2 detectGroundForwardStartPos
+                    = rigidbody.position + new Vector2(_detectGroundForwardOffset.x * direction, _detectGroundForwardOffset.y);
+
+                RaycastHit2D hit = Physics2D.Raycast(detectGroundForwardStartPos, Vector2.down, _detectGroundForwardDistance, groundMask);
+
+                _groundForward = hit.collider;
+
+                return _groundForward;
+            }
+        }
+
         private float _horizontal;
         private float _vertical;
+
+        [SerializeField] private Collider2D _groundForward;
+        [SerializeField] private Vector2 _detectGroundForwardOffset;
+        [SerializeField] private float _detectGroundForwardDistance;
 
         [SerializeField] private AI _ai;
         private Transform _target;
@@ -168,31 +187,35 @@ namespace Platformer.Controllers
 
         protected override void FixedUpdate()
         {
-            if (machine.currentStateID != CharacterStateID.Move)
-            {
-                base.FixedUpdate();
-            }
+            if (isGroundForwardExist == false)
+                return;
 
-            else
-            {
-                machine.FixedUpdateState();
+            base.FixedUpdate();
 
-                Vector2 expected = rigidbody.position + move * Time.fixedDeltaTime;
-                float distanceX = Mathf.Abs(expected.x - rigidbody.position.x);
-                float height = distanceX * Mathf.Tan(_slopeAngle * Mathf.Deg2Rad);
-                Vector2 origin = expected + Vector2.up * height;
-                RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, height * 2, groundMask);
+            //if (machine.currentStateID != CharacterStateID.Move)
+            //{
+            //    base.FixedUpdate();
+            //}
 
-                Debug.DrawRay(origin, Vector2.down * height * 2, Color.red);
-                Debug.Log(hit);
+            //else
+            //{
+            //    machine.FixedUpdateState();
 
-                if (hit.collider)
-                {
-                    rigidbody.position = hit.point;
-                    Debug.Log(hit.point);
-                }
-            }
-            
+            //    Vector2 expected = rigidbody.position + move * Time.fixedDeltaTime;
+            //    float distanceX = Mathf.Abs(expected.x - rigidbody.position.x);
+            //    float height = distanceX * Mathf.Tan(_slopeAngle * Mathf.Deg2Rad);
+            //    Vector2 origin = expected + Vector2.up * height;
+            //    RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, height * 2, groundMask);
+
+            //    Debug.DrawRay(origin, Vector2.down * height * 2, Color.red);
+            //    Debug.Log(hit);
+
+            //    if (hit.collider)
+            //    {
+            //        rigidbody.position = hit.point;
+            //        Debug.Log(hit.point);
+            //    }
+            //}
         }
 
         public override void DepleteHp(object subject, float amount)
@@ -219,6 +242,7 @@ namespace Platformer.Controllers
         {
             base.OnDrawGizmosSelected();
             DrawDetectTargetGizmos();
+            DrawDetectGroundForwardGizmos();
         }
 
         void DrawDetectTargetGizmos()
@@ -230,5 +254,14 @@ namespace Platformer.Controllers
             Gizmos.DrawWireSphere(transform.position, _attackRange);
         }
 
+        void DrawDetectGroundForwardGizmos()
+        {
+            Gizmos.color = Color.blue;
+
+            Vector2 detectGroundForwardStartPos
+                = rigidbody.position + new Vector2(_detectGroundForwardOffset.x * direction, _detectGroundForwardOffset.y);
+
+            Gizmos.DrawLine(detectGroundForwardStartPos, detectGroundForwardStartPos + Vector2.down * _detectGroundForwardDistance);
+        }
     }
 }

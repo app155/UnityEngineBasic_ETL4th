@@ -353,14 +353,21 @@ namespace Platformer.Controllers
         {
             hpValue -= amount;
             onHpDepleted?.Invoke(amount);
-            DamagePopUp damagePopUp = poolOfDamagePopUp.pool.Get();
-            damagePopUp.transform.position = transform.position + Vector3.up * 0.1f;
-            damagePopUp.Show(amount);
+            //DamagePopUp damagePopUp = poolOfDamagePopUp.pool.Get();
+            //damagePopUp.transform.position = transform.position + Vector3.up * 0.1f;
+            //damagePopUp.Show(amount);
+
+            string name = gameObject.name == "Player" ? "Player" : "Enemy";
+
+            DamagePopUp dpu = PoolAssets.instance[$"PoolOf{name}DamagePopUp"].pool.Get();
+            dpu.transform.position = transform.position + Vector3.up * (_col.size.y + 0.1f);
+            dpu.Show(amount);
         }
 
         public void RecoverHp(object subject, float amount)
         {
             hpValue += amount;
+
 
             onHpRecovered?.Invoke(amount);
         }
