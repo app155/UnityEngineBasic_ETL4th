@@ -11,6 +11,7 @@ public class PoolAssets : MonoBehaviour
     private Dictionary<string, PoolOfDamagePopUp> _poolOfDamagePopUps;
     [SerializeField] private List<PoolOfDamagePopUp> _poolOfDamagePopUpList;
 
+
     private void Awake()
     {
         instance = this;

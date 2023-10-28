@@ -361,7 +361,7 @@ namespace Platformer.Controllers
 
             DamagePopUp dpu = PoolAssets.instance[$"PoolOf{name}DamagePopUp"].pool.Get();
             dpu.transform.position = transform.position + Vector3.up * (_col.size.y + 0.1f);
-            dpu.Show(amount);
+            dpu.GetComponent<DamagePopUp>().Show(amount);
         }
 
         public void RecoverHp(object subject, float amount)
