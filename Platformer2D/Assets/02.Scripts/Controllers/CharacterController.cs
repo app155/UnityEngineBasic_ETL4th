@@ -219,7 +219,14 @@ namespace Platformer.Controllers
         public bool hasDoubleJumped;
         protected CharacterMachine machine;
 
-        public PoolOfDamagePopUp poolOfDamagePopUp;
+        public virtual void SetUp()
+        {
+            hpValue = hpMax;
+            var renderer = GetComponentInChildren<SpriteRenderer>();
+            Color color = renderer.color;
+            color.a = 1.0f;
+            renderer.color = color;
+        }
 
         public void Knockback(Vector2 force)
         {
@@ -353,15 +360,7 @@ namespace Platformer.Controllers
         {
             hpValue -= amount;
             onHpDepleted?.Invoke(amount);
-            //DamagePopUp damagePopUp = poolOfDamagePopUp.pool.Get();
-            //damagePopUp.transform.position = transform.position + Vector3.up * 0.1f;
-            //damagePopUp.Show(amount);
-
-            string name = gameObject.name == "Player" ? "Player" : "Enemy";
-
-            DamagePopUp dpu = PoolAssets.instance[$"PoolOf{name}DamagePopUp"].pool.Get();
-            dpu.transform.position = transform.position + Vector3.up * (_col.size.y + 0.1f);
-            dpu.GetComponent<DamagePopUp>().Show(amount);
+            
         }
 
         public void RecoverHp(object subject, float amount)

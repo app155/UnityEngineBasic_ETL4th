@@ -1,4 +1,6 @@
+using Platformer.Effects;
 using Platformer.FSM;
+using Platformer.GameElements;
 using System.Linq;
 using UnityEngine;
 
@@ -112,6 +114,10 @@ namespace Platformer.Controllers
             if (subject.GetType().Equals(typeof(Transform)))
                 Knockback(Vector2.right * (((Transform)subject).position.x - transform.position.x < 0 ? 1.0f : -1.0f) * 1.0f
                           + Vector2.up * 1.0f);
+
+            DamagePopUp damagePopUp = PoolManager<DamagePopUp>.instance.GetPool<DamagePopUp>(PoolTag.DamagePopUp_Player).Get();
+            damagePopUp.transform.position = transform.position + Vector3.up * 0.2f;
+            damagePopUp.Show(amount);
         }
     }
 }

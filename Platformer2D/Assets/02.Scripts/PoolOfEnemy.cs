@@ -1,4 +1,5 @@
 using Platformer.Controllers;
+using Platformer.Effects;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

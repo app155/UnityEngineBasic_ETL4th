@@ -19,10 +19,7 @@ public class EnemySpawner : MonoBehaviour
         get
         {
             if (_spawnTimer < _spawnTime)
-            {
-                _spawnTimer += Time.deltaTime;
                 return false;
-            }
 
             float randomX = Random.Range(transform.position.x - _spawnArea.size.x / 2, transform.position.x + _spawnArea.size.x / 2);
             float randomY = Random.Range(transform.position.y - _spawnArea.size.y / 2, transform.position.y + _spawnArea.size.y / 2);
@@ -37,6 +34,7 @@ public class EnemySpawner : MonoBehaviour
                 return false;
 
             _spawnPoint = hit.point;
+            _spawnTimer = 0.0f;
             return true;
         }
     }
@@ -48,9 +46,11 @@ public class EnemySpawner : MonoBehaviour
 
     private void Update()
     {
+        _spawnTimer += Time.deltaTime;
+        
         if (canSpawn)
         {
-            EnemyController enemy = _enemyPool.pool.Get();
+            EnemyController enemy = _enemyPool.pool.Get().GetComponent<EnemyController>();
             enemy.transform.position = _spawnPoint;
             _spawnTimer = 0.0f;
         }
