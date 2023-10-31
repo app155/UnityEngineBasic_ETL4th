@@ -1,6 +1,7 @@
 using Platformer.Effects;
 using Platformer.FSM;
 using Platformer.GameElements;
+using Platformer.GameElements.Pool;
 using Platformer.Stats;
 using System;
 using System.Collections;
@@ -76,6 +77,12 @@ namespace Platformer.Controllers
 
         private CapsuleCollider2D _trigger;
 
+        public override void SetUp()
+        {
+            base.SetUp();
+            _trigger.enabled = true;
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -92,6 +99,12 @@ namespace Platformer.Controllers
 
         private void UpdateAI()
         {
+            if (machine.currentStateID == CharacterStateID.Hurt ||
+                machine.currentStateID == CharacterStateID.Die)
+            {
+                return;
+            }    
+
             if (_autoFollow)
             {
                 if (_target == null)
@@ -227,7 +240,7 @@ namespace Platformer.Controllers
             if (subject.GetType().Equals(typeof(Transform)))
                 Knockback(Vector2.right * (((Transform)subject).position.x - transform.position.x < 0 ? 1.0f : -1.0f) * 1.0f);
 
-            DamagePopUp damagePopUp = PoolManager<DamagePopUp>.instance.GetPool<DamagePopUp>(PoolTag.DamagePopUp_Enemy).Get();
+            DamagePopUp damagePopUp = PoolManager.instance.Get<DamagePopUp>(PoolTag.DamagePopUp_Enemy);
             damagePopUp.transform.position = transform.position + Vector3.up * 0.2f;
             damagePopUp.Show(amount);
         }

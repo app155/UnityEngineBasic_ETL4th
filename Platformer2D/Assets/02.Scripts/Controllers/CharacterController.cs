@@ -221,11 +221,13 @@ namespace Platformer.Controllers
 
         public virtual void SetUp()
         {
+            GetComponentInChildren<Animator>().Play("Idle");
             hpValue = hpMax;
             var renderer = GetComponentInChildren<SpriteRenderer>();
             Color color = renderer.color;
             color.a = 1.0f;
             renderer.color = color;
+            machine.ChangeStateForcely(CharacterStateID.Idle);
         }
 
         public void Knockback(Vector2 force)

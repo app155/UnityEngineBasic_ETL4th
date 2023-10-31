@@ -56,5 +56,15 @@ namespace Platformer.FSM
             states[currentStateID].OnStateEnter();
             return true;
         }
+
+        public void ChangeStateForcely(T newStateID)
+        {
+            if (Comparer<T>.Default.Compare(currentStateID, default) != 0)
+                states[currentStateID].OnStateExit();
+
+            previousStateID = currentStateID;
+            currentStateID = newStateID;
+            states[currentStateID].OnStateEnter();
+        }
     }
 }

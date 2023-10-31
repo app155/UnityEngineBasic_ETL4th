@@ -1,16 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace Platformer.GameElements
+namespace Platformer.GameElements.Pool
 {
     public class GameObjectPool : MonoBehaviour
     {
+        new public PoolTag tag;
+
         public class PooledItem : MonoBehaviour
         {
             public IObjectPool<GameObject> pool;
-            private GameObject _item;
+            public Action onReturnToPool;
 
             private void OnDisable()
             {
@@ -19,7 +22,8 @@ namespace Platformer.GameElements
 
             public void ReturnToPool()
             {
-                pool.Release(_item);
+                pool.Release(gameObject);
+                onReturnToPool?.Invoke();
             }
         }
 
@@ -46,8 +50,8 @@ namespace Platformer.GameElements
                                                             OnReturnToPool,
                                                             OnDestroyPooledItem,
                                                             _collectionCheck,
-                                                            _count,
-                                                            _countMax);
+                                                            _defaultCapacity,
+                                                            _sizeMax);
                     }
 
                     else
@@ -57,7 +61,7 @@ namespace Platformer.GameElements
                                                             OnReturnToPool,
                                                             OnDestroyPooledItem,
                                                             _collectionCheck,
-                                                            _countMax);
+                                                            _sizeMax);
                     }
                 }
 
@@ -67,8 +71,13 @@ namespace Platformer.GameElements
 
         private IObjectPool<GameObject> _pool;
         [SerializeField] private GameObject _prefab;
-        [SerializeField] private int _count;
-        [SerializeField] private int _countMax;
+        [SerializeField] private int _defaultCapacity;
+        [SerializeField] private int _sizeMax;
+
+        private void Awake()
+        {
+            PoolManager.instance.Register(tag, pool);
+        }
 
         private GameObject CreatePooledItem()
         {
