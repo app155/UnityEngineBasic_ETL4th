@@ -30,11 +30,6 @@ namespace Platformer.GameElements
             StopAllCoroutines();
         }
 
-        private void OnApplicationQuit()
-        {
-            StopAllCoroutines();
-        }
-
         private IEnumerator SpawnAll()
         {
             while (_spawnedCount + _spawningCount < _countLimit)

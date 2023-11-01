@@ -49,5 +49,23 @@ namespace Platformer.FSM
                 { CharacterStateID.Die, new Die(machine) },
             };
         }
+
+        public static IDictionary<CharacterStateID, IState<CharacterStateID>> GetPiranhaPlantData(CharacterMachine machine)
+        {
+            return new Dictionary<CharacterStateID, IState<CharacterStateID>>()
+            {
+                { CharacterStateID.Idle, new Idle(machine) },
+                { CharacterStateID.Move, new Move(machine) },
+                { CharacterStateID.Fall, new Fall(machine, 0.75f) },
+                { CharacterStateID.Land, new Land(machine) },
+                { CharacterStateID.Hurt, new Hurt(machine) },
+                { CharacterStateID.Die, new Die(machine) },
+                { CharacterStateID.Attack, new Attack(machine, 0.7f,
+                    new SkillCastSetting[]
+                    {
+                        SkillCastSettingAssets.instance["PiranhaPlantAttack"],
+                    }) },
+            };
+        }
     }
 }

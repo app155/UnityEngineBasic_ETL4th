@@ -3687,6 +3687,7 @@ Transform:
   - {fileID: 8908764361064798720}
   - {fileID: 7135819039953479300}
   - {fileID: 6708546534793810060}
+  - {fileID: 1778575987}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &953759370
@@ -4606,6 +4607,57 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1298211102
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1298211104}
+  - component: {fileID: 1298211103}
+  m_Layer: 0
+  m_Name: EnemySpawner (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1298211103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1298211102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e020328e20356274998e4f8ec4a5ab4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _poolTag: 4
+  _size: {x: 3.48, y: 2.26}
+  _countLimit: 5
+  _delay: 2
+  _spawnPointMask:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!4 &1298211104
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1298211102}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1311589092 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 245958421767312546, guid: 2b7a2c95e0c6ddb48bb20b2f19679e2d, type: 3}
@@ -4910,6 +4962,7 @@ MonoBehaviour:
   _skillCastSettingList:
   - {fileID: 11400000, guid: 3d0235ceecda7344f9be40200bafe1d8, type: 2}
   - {fileID: 11400000, guid: d8afda64e1e6e1343af58282b4fec0f0, type: 2}
+  - {fileID: 11400000, guid: 8934c070348be4747ac066d40a7ab7a4, type: 2}
 --- !u!1 &1471297441
 GameObject:
   m_ObjectHideFlags: 0
@@ -5991,6 +6044,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1778575986
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1778575987}
+  - component: {fileID: 1778575988}
+  m_Layer: 0
+  m_Name: PoolOfPiranhaPlant
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1778575987
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1778575986}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 943574537}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1778575988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1778575986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04aba143f24872d48ac5d57ab2ad9417, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tag: 4
+  _collectionType: 0
+  _collectionCheck: 0
+  _prefab: {fileID: 9023601953752048252, guid: 6854929e5371abb4cb5dde8873cc5ed1, type: 3}
+  _defaultCapacity: 5
+  _sizeMax: 10
 --- !u!1 &1831680026
 GameObject:
   m_ObjectHideFlags: 0
@@ -7295,3 +7398,4 @@ SceneRoots:
   - {fileID: 1459655888}
   - {fileID: 943574537}
   - {fileID: 1618681014}
+  - {fileID: 1298211104}

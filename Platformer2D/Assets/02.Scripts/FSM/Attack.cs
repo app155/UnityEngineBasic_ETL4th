@@ -151,6 +151,9 @@ namespace Platformer.FSM.Character
             if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
                 nextID = CharacterStateID.Idle;
 
+            if (controller.isGrounded)
+                controller.move = new Vector2(controller.horizontal * controller.moveSpeed * 0.1f, 0.0f);
+
             return nextID;
         }
     }

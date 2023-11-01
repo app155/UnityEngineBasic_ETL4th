@@ -221,13 +221,11 @@ namespace Platformer.Controllers
 
         public virtual void SetUp()
         {
-            GetComponentInChildren<Animator>().Play("Idle");
             hpValue = hpMax;
             var renderer = GetComponentInChildren<SpriteRenderer>();
             Color color = renderer.color;
             color.a = 1.0f;
             renderer.color = color;
-            machine.ChangeStateForcely(CharacterStateID.Idle);
         }
 
         public void Knockback(Vector2 force)
@@ -245,14 +243,19 @@ namespace Platformer.Controllers
 
         protected virtual void Awake()
         {
+            hpValue = _hpMax;
             rigidbody = GetComponent<Rigidbody2D>();
             _col = GetComponent<CapsuleCollider2D>();
-            hpValue = _hpMax;
         }
 
         protected virtual void Start()
         {
             
+        }
+
+        private void OnDisable()
+        {
+            machine.ChangeStateForcely(CharacterStateID.Idle);
         }
 
         protected virtual void Update()

@@ -100,7 +100,8 @@ namespace Platformer.Controllers
         private void UpdateAI()
         {
             if (machine.currentStateID == CharacterStateID.Hurt ||
-                machine.currentStateID == CharacterStateID.Die)
+                machine.currentStateID == CharacterStateID.Die ||
+                machine.currentStateID == CharacterStateID.Attack)
             {
                 return;
             }    
