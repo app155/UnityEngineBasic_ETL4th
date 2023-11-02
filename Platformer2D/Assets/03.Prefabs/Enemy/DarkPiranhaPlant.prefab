@@ -295,7 +295,7 @@ SpriteRenderer:
   m_SortingLayer: 8
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 86afbf04432b34e1883a20f99f007881, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.3962264, g: 0.30464578, b: 0.30464578, a: 1}
   m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
@@ -315,7 +315,7 @@ Animator:
   m_GameObject: {fileID: 6035918261885407445}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e7e575486e2ec5844ae131cfa27da279, type: 2}
+  m_Controller: {fileID: 9100000, guid: 38ff30b1e4426444f8858ab1cc90eec6, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -620,9 +620,9 @@ GameObject:
   - component: {fileID: 6867932301070234992}
   - component: {fileID: 1557382473256179030}
   - component: {fileID: 600161807599555828}
-  - component: {fileID: 6561006416399614840}
+  - component: {fileID: -5361242794012397988}
   m_Layer: 15
-  m_Name: PiranhaPlant
+  m_Name: DarkPiranhaPlant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -708,7 +708,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0.15}
   m_Size: {x: 0.14, y: 0.29}
   m_Direction: 0
---- !u!114 &6561006416399614840
+--- !u!114 &-5361242794012397988
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -717,7 +717,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9023601953752048252}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 368557cc253200549a6462d4d90f0cab, type: 3}
+  m_Script: {fileID: 11500000, guid: 23ec615c7abfb224ab0dcb9b569c6cf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   damageMin: 5
@@ -753,14 +753,14 @@ MonoBehaviour:
   _detectGroundForwardOffset: {x: 0.1, y: 0.1}
   _detectGroundForwardDistance: 0.2
   _ai: 0
-  _targetDetectRange: 1.5
+  _targetDetectRange: 2.5
   _autoFollow: 1
   _attackEnable: 1
-  _attackRange: 0.4
+  _attackRange: 2.5
   _targetMask:
     serializedVersion: 2
     m_Bits: 1024
   _behaviours: 01000000
-  _behaviourTimeMin: 0.4
+  _behaviourTimeMin: 0.5
   _behaviourTimeMax: 2
   _slopeAngle: 45

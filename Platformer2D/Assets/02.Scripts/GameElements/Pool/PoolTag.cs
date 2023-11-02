@@ -7,5 +7,8 @@ namespace Platformer.GameElements.Pool
         DamagePopUp_Enemy,
         Enemy_Slug,
         Enemy_PiranhaPlant,
+        Enemy_DarkPiranhaPlant,
+        Projectile_DarkPiranhaPlant,
+        Particle_ProjectileExplosion,
     }
 }
