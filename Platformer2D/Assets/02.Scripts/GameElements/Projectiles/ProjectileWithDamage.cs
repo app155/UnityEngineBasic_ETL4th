@@ -15,12 +15,6 @@ namespace Platformer.GameElements
             if (hit.collider.TryGetComponent(out IHp target))
             {
                 target.DepleteHp(owner, damage);
-
-                ParticleSystem system =
-                    ParticleSystemPoolManager.instance.Get(PoolTag.Particle_ProjectileExplosion);
-
-                system.transform.position = transform.position;
-                system.transform.rotation = Quaternion.Euler(0, Mathf.Sign(velocity.x) * -90.0f, 0);
             }
         }
     }

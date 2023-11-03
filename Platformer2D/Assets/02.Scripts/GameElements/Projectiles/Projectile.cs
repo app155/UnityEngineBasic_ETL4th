@@ -1,3 +1,4 @@
+using Platformer.GameElements.Pool;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ namespace Platformer.GameElements
 {
     public class Projectile : MonoBehaviour
     {
+        [SerializeField] private PoolTag _effectPoolTag;
         [HideInInspector] public Transform owner;
         [HideInInspector] public Vector3 velocity;
         [HideInInspector] public LayerMask targetMask;
@@ -47,11 +49,22 @@ namespace Platformer.GameElements
         protected virtual void OnHitBound(RaycastHit2D hit)
         {
             gameObject.SetActive(false);
+            ExplosionEffect(hit);
         }
 
         protected virtual void OnHitTarget(RaycastHit2D hit)
         {
             gameObject.SetActive(false);
+            ExplosionEffect(hit);
+        }
+
+        private void ExplosionEffect(RaycastHit2D hit)
+        {
+            ParticleSystem ps = ParticleSystemPoolManager.instance.Get<ParticleSystem>(_effectPoolTag);
+            ps.transform.position = hit.point;
+            float theta = Mathf.Acos(Vector2.Dot(-velocity.normalized, hit.normal));
+            Vector2 look = Quaternion.Euler(0.0f, 0.0f, theta) * hit.normal;
+            ps.transform.LookAt(hit.point + look);
         }
     }
 }

@@ -37,6 +37,7 @@ public class ParticleSystemPool : MonoBehaviour
     public PoolType poolType;
 
     [SerializeField] private ParticleSystem _prefab;
+    [SerializeField] private PoolTag _poolTag;
 
     // Collection checks will throw errors if we try to release an item that is already in the pool.
     public bool collectionChecks = true;
@@ -46,7 +47,7 @@ public class ParticleSystemPool : MonoBehaviour
 
     private void Awake()
     {
-        ParticleSystemPoolManager.instance.Register(PoolTag.Particle_ProjectileExplosion, Pool);
+        ParticleSystemPoolManager.instance.Register(_poolTag, Pool);
     }
 
     public IObjectPool<ParticleSystem> Pool
