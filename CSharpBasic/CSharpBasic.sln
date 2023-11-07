@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boxing", "Boxing\Boxing.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Collections", "Collections\Collections.csproj", "{D0E30A99-AEA0-4C5E-8F21-EB1A6D242B25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SortAlgos", "SortAlgos\SortAlgos.csproj", "{F4D43871-B4FA-47ED-851E-C42FC79E662A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SortAlgos", "SortAlgos\SortAlgos.csproj", "{F4D43871-B4FA-47ED-851E-C42FC79E662A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algorithms", "Algorithms\Algorithms.csproj", "{1CD93E32-5DFA-43A6-834B-6975E9FAFEB8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{F4D43871-B4FA-47ED-851E-C42FC79E662A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4D43871-B4FA-47ED-851E-C42FC79E662A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4D43871-B4FA-47ED-851E-C42FC79E662A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CD93E32-5DFA-43A6-834B-6975E9FAFEB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CD93E32-5DFA-43A6-834B-6975E9FAFEB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CD93E32-5DFA-43A6-834B-6975E9FAFEB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CD93E32-5DFA-43A6-834B-6975E9FAFEB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
