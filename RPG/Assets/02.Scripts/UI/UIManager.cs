@@ -33,6 +33,8 @@ namespace RPG.UI
             {
                 throw new Exception($"[UIManager] - Register");
             }
+
+            Debug.Log($"[UIManager] registered {type}");
         }
 
         public void Push(IUI ui)
@@ -42,7 +44,7 @@ namespace RPG.UI
 
             int sortingOrder = 0;
 
-            if (showns.Last != null)
+            if (showns.Last?.Value != null)
             {
                 sortingOrder = showns.Last.Value.sortingOrder + 1;
                 showns.Last.Value.inputActionEnabled = false;

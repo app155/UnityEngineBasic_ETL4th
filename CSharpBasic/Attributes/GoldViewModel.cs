@@ -39,5 +39,11 @@ namespace Attributes
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public void ReadGoldModel()
+        {
+            // local에 있는지 server에 있는지 확인
+            // 조건에 맞는 위치에 데이터 읽기 요청하는 코드 작성
+        }
     }
 }
