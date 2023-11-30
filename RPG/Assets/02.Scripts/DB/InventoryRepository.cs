@@ -24,5 +24,10 @@ namespace RPG.DB
         {
             throw new NotImplementedException();
         }
+
+        public void Update(InventorySlot entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
