@@ -10,7 +10,7 @@ namespace RPG.DB
         IEnumerable<T> GetAll();
         T Get(int id);
         T Find(Predicate<T> match);
-        void Insert(InventorySlot entity);
+        void Insert(InventoryModel entity);
         void Insert(T entity);
         void Update(T entity);
     }

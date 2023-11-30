@@ -22,7 +22,7 @@ namespace RPG.UI
 
         protected Canvas canvas;
 
-        public void InputAction()
+        public virtual void InputAction()
         {
             if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
             {
@@ -41,21 +41,21 @@ namespace RPG.UI
             }
         }
 
-        public void Show()
+        public virtual void Show()
         {
             UIManager.instance.Push(this);
             gameObject.SetActive(true);
             onShow?.Invoke();
         }
 
-        public void Hide()
+        public virtual void Hide()
         {
             UIManager.instance.Pop(this);
             gameObject.SetActive(false);
             onHide?.Invoke();
         }
 
-        public void Init()
+        public virtual void Init()
         {
             canvas = GetComponent<Canvas>();
             UIManager.instance.Register(this);
