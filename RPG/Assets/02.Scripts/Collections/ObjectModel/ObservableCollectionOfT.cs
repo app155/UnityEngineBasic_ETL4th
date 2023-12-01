@@ -52,6 +52,11 @@ namespace RPG.Collections.ObjectModel
             }
         }
 
+        public bool Contains(int id)
+        {
+            return items.ContainsKey(id);
+        }
+
         public void Add(int id, T item)
         {
             if (items.TryAdd(id, new Pair<T>(id, item)) == false)
