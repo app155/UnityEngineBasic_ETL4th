@@ -9,7 +9,6 @@ namespace RPG.Collections.ObjectModel
     {
         public int id;
         public T item;
-
         public Pair(int id, T item)
         {
             this.id = id;
@@ -21,73 +20,67 @@ namespace RPG.Collections.ObjectModel
     {
         public ObservableCollection()
         {
-            items = new Dictionary<int, Pair<T>>();
+            Items = new Dictionary<int, Pair<T>>();
         }
 
         public T this[int id]
         {
-            get => items[id].item;
+            get => Items[id].item;
             set => Change(id, value);
         }
 
-        public Dictionary<int, Pair<T>> items;
+        public Dictionary<int, Pair<T>> Items;
 
-        public event Action<int, T> onItemAdded;
-        public event Action<int, T> onItemRemoved;
-        public event Action<int, T> onItemChanged;
-        public event Action onCollectionChanged;
-
-        public void Change(int id, T item)
-        {
-            if (items.TryGetValue(id, out Pair<T> pair))
-            {
-                items[id] = new Pair<T>(id, item);
-                onItemChanged?.Invoke(id, item);
-                onCollectionChanged?.Invoke();
-            }
-
-            else
-            {
-                throw new Exception($"[ObservableCollection] - Change");
-            }
-        }
+        public event Action<int, T> OnItemAdded;
+        public event Action<int, T> OnItemRemoved;
+        public event Action<int, T> OnItemChanged;
+        public event Action OnCollectionChanged;
 
         public bool Contains(int id)
         {
-            return items.ContainsKey(id);
+            return Items.ContainsKey(id);
+        }
+
+        public void Change(int id, T item)
+        {
+            if (Items.TryGetValue(id, out Pair<T> pair))
+            {
+                Items[id] = new Pair<T>(id, item);
+                OnItemChanged?.Invoke(id, item);
+                OnCollectionChanged?.Invoke();
+            }
+            else
+                throw new Exception($"[ObservableCollection<{typeof(T)}>] : Failed to change item, {id} not found.");
         }
 
         public void Add(int id, T item)
         {
-            if (items.TryAdd(id, new Pair<T>(id, item)) == false)
-            {
-                throw new Exception($"[ObservableCollection] - Add");
-            }
+            if (Items.TryAdd(id, new Pair<T>(id, item)) == false)
+                throw new Exception($"[ObservableCollection<{typeof(T)}>] : id {id} is already exist.");
 
-            onItemAdded?.Invoke(id, item);
-            onCollectionChanged?.Invoke();
+            OnItemAdded?.Invoke(id, item);
+            OnCollectionChanged?.Invoke();
         }
 
         public void Remove(int id)
         {
-            if (items.TryGetValue(id, out Pair<T> pair) == false)
-            {
-                throw new Exception($"[ObservableCollection] - Remove");
-            }
+            if (Items.TryGetValue(id, out Pair<T> pair) == false)
+                throw new Exception($"[ObservableCollection<{typeof(T)}>] : Failed to remove. id {id} is not exist.");
 
-            items.Remove(id);
-            onItemRemoved?.Invoke(id, pair.item);
-            onCollectionChanged?.Invoke();
+            Items.Remove(id);
+            OnItemRemoved?.Invoke(id, pair.item);
+            OnCollectionChanged?.Invoke();
         }
+
 
         public IEnumerator<Pair<T>> GetEnumerator()
         {
-            return items.Values.GetEnumerator();
+            return Items.Values.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return items.Values.GetEnumerator();
+            return Items.Values.GetEnumerator();
         }
     }
 }

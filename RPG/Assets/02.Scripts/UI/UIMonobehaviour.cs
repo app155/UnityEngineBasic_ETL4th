@@ -7,15 +7,13 @@ using UnityEngine.UI;
 
 namespace RPG.UI
 {
-    [RequireComponent(typeof(Canvas), typeof(GraphicRaycaster))]
     public abstract class UIMonoBehaviour : MonoBehaviour, IUI, IInitializable
     {
-        public int sortingOrder
-        {
+        public int sortingOrder 
+        { 
             get => canvas.sortingOrder;
             set => canvas.sortingOrder = value;
         }
-
         public bool inputActionEnabled { get; set; }
 
         public event Action onShow;
@@ -31,8 +29,8 @@ namespace RPG.UI
                 if (CustomInputModule.main.TryGetHovered<GraphicRaycaster, CanvasRenderer>
                     (out CanvasRenderer hovered))
                 {
-                    // 감지된 렌더러의 최상위에 UI단위가 있으면서,
-                    // 해당 UI가 현재 InputAction 실행중인 UI와 다르다면 -> 다른 UI가 선택된 경우임.
+                    // 감지된 렌더러의 최상위에 UI 단위가 있으면서 
+                    // 해당 감지된 UI 가 현재 InputAction 실행중인 UI 와 다르다면 -> 다른UI 선택된거임
                     if (hovered.transform.root.TryGetComponent(out UIMonoBehaviour ui) &&
                         ui != this)
                     {
@@ -63,17 +61,13 @@ namespace RPG.UI
             UIManager.instance.Register(this);
 
             if (_hideWhenPointerDownOutside)
-            {
                 CreateOutsidePanel();
-            }    
         }
 
         private void Update()
         {
             if (inputActionEnabled)
-            {
                 InputAction();
-            }
         }
 
         private void CreateOutsidePanel()

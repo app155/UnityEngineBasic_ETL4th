@@ -21,7 +21,6 @@ namespace RPG.UI
                 _itemIcon.sprite = ItemInfoAssets.instance[itemID].icon;
                 _itemNum.text = itemNum == 1 ? string.Empty : itemNum.ToString();
             }
-
             else
             {
                 _itemIcon.sprite = null;

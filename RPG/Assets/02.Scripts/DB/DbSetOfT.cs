@@ -14,6 +14,7 @@ namespace RPG.DB
             path = $"{Application.persistentDataPath}/{typeof(T)}.json";
         }
 
+
         public List<T> Entities;
         public string path { get; set; }
 
@@ -21,7 +22,6 @@ namespace RPG.DB
         {
             T entity = Activator.CreateInstance<T>();
             Entities.Add(entity);
-
             return entity;
         }
 

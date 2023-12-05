@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -25,9 +23,7 @@ namespace RPG.UI
         private void OnEnable()
         {
             if (_resetPositionOnEnable)
-            {
                 _rectTransform.anchoredPosition = _origin;
-            }
         }
     }
 }

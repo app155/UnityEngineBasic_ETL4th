@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace RPG.DB
 {
@@ -10,7 +8,6 @@ namespace RPG.DB
         IEnumerable<T> GetAll();
         T Get(int id);
         T Find(Predicate<T> match);
-        void Insert(InventoryModel entity);
         void Insert(T entity);
         void Update(T entity);
     }

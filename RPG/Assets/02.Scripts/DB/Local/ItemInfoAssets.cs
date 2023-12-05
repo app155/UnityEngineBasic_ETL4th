@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 namespace RPG.DB.Local
 {
     public class ItemInfoAssets : MonoBehaviour
@@ -15,11 +14,9 @@ namespace RPG.DB.Local
                     _instance = Instantiate(Resources.Load<ItemInfoAssets>("ItemInfoAssets"));
                     _instance.Init();
                 }
-
                 return _instance;
             }
         }
-
         private static ItemInfoAssets _instance;
 
         public ItemInfo this[int itemID] => _dictionary[itemID];
@@ -29,7 +26,6 @@ namespace RPG.DB.Local
         private void Init()
         {
             _dictionary = new Dictionary<int, ItemInfo>();
-
             foreach (var item in _list)
             {
                 _dictionary.Add(item.id, item);

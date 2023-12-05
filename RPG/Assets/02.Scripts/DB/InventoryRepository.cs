@@ -10,7 +10,7 @@ namespace RPG.DB
         public InventoryRepository(GameDbContext context)
         {
             this.context = context;
-            Debug.Log("[InventoryRepository] - constructed");
+            Debug.Log($"[InventoryRepository] : Constructed");
         }
 
         public InventoryModel Find(Predicate<InventoryModel> match)
@@ -20,7 +20,7 @@ namespace RPG.DB
 
         public InventoryModel Get(int id)
         {
-            return context.inventory.Find(x => x.id == id);
+            return context.inventory.Find(x => x.ID == id);
         }
 
         public IEnumerable<InventoryModel> GetAll()
@@ -30,24 +30,18 @@ namespace RPG.DB
 
         public void Insert(InventoryModel entity)
         {
-            int index = context.inventory.Entities.FindLastIndex(x => x.id <= entity.id);
+            int index = context.inventory.Entities.FindLastIndex(x => x.ID <= entity.ID);
             index = index < 0 ? 0 : index;
             context.inventory.Entities.Insert(index, entity);
         }
 
         public void Update(InventoryModel entity)
         {
-            int index = context.inventory.Entities.FindLastIndex(x => x.id == entity.id);
-
+            int index = context.inventory.Entities.FindLastIndex(x => x.ID == entity.ID);
             if (index >= 0)
-            {
                 context.inventory.Entities[index] = entity;
-            }
-
             else
-            {
-                throw new Exception($"[InventoryRepository] - Update");
-            }
+                throw new Exception($"[InventoryRepository] : Can't get entity of id {entity.ID}");
         }
     }
 }

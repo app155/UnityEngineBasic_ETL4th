@@ -1,9 +1,7 @@
 using RPG.DB;
-using RPG.UI;
 using UnityEngine;
 using System;
 using RPG.DB.Local;
-using static RPG.EventSystems.InputSystem;
 
 namespace RPG.Collections.ObjectModel
 {
@@ -28,35 +26,34 @@ namespace RPG.Collections.ObjectModel
             inventorySource = new InventorySource();
             swapCommand = new SwapCommand(this);
             removeCommand = new RemoveCommand(this);
-            Debug.Log("[InventoryPresenter] - constructed");
+            Debug.Log($"[InventoryPresenter] : Constructed");
         }
-            
+
         public class InventorySource : ObservableCollection<InventorySlotData>
         {
             public InventorySource()
             {
                 var entities = Repositories.instance.inventory.GetAll();
-
                 foreach (var entity in entities)
                 {
-                    items.Add(entity.id,
-                        new Pair<InventorySlotData>(entity.id, new InventorySlotData(entity.id, entity.itemID, entity.itemNum)));
+                    Items.Add(entity.ID,
+                              new Pair<InventorySlotData>(entity.ID,
+                                                          new InventorySlotData(entity.ID, entity.itemID, entity.itemNum)));
                 }
             }
         }
-
         public InventorySource inventorySource;
 
         public class SwapCommand
         {
-            private InventoryPresenter _presenter;
-            private InventorySource _inventorySource;
-
             public SwapCommand(InventoryPresenter presenter)
             {
                 _presenter = presenter;
                 _inventorySource = _presenter.inventorySource;
             }
+
+            InventoryPresenter _presenter;
+            InventorySource _inventorySource;
 
             public bool CanExecute(int slotID1, int slotID2)
             {
@@ -65,15 +62,13 @@ namespace RPG.Collections.ObjectModel
                        _inventorySource.Contains(slotID2);
             }
 
-            public void Excute(int slotID1, int slotID2)
+            public void Execute(int slotID1, int slotID2)
             {
-                var slot1Data = Repositories.instance.inventory.Get(slotID1);
-                var slot2Data = Repositories.instance.inventory.Get(slotID2);
+                InventoryModel slot1Data = Repositories.instance.inventory.Get(slotID1);
+                InventoryModel slot2Data = Repositories.instance.inventory.Get(slotID2);
 
                 if (slot1Data == null || slot2Data == null)
-                { 
-                    throw new Exception("[InventoryPresenter] - Execute");
-                }
+                    throw new Exception($"[InventoryPresenter] : Failed to swap {slotID1}, {slotID2}.");
 
                 InventorySlotData expectedSlot1;
                 InventorySlotData expectedSlot2;
@@ -90,7 +85,6 @@ namespace RPG.Collections.ObjectModel
                         itemID = remains > 0 ? slot2Data.itemID : 0,
                         itemNum = remains > 0 ? remains : 0,
                     };
-
                     expectedSlot2 = new InventorySlotData()
                     {
                         slotID = slotID2,
@@ -98,7 +92,6 @@ namespace RPG.Collections.ObjectModel
                         itemNum = remains > 0 ? max : slot1Data.itemNum + slot2Data.itemNum,
                     };
                 }
-
                 else
                 {
                     expectedSlot1 = new InventorySlotData()
@@ -107,7 +100,6 @@ namespace RPG.Collections.ObjectModel
                         itemID = slot2Data.itemID,
                         itemNum = slot2Data.itemNum,
                     };
-
                     expectedSlot2 = new InventorySlotData()
                     {
                         slotID = slotID2,
@@ -122,7 +114,6 @@ namespace RPG.Collections.ObjectModel
                     itemID = expectedSlot1.itemID,
                     itemNum = expectedSlot1.itemNum,
                 });
-
                 Repositories.instance.inventory.Update(new InventoryModel()
                 {
                     id = expectedSlot2.slotID,
@@ -152,19 +143,13 @@ namespace RPG.Collections.ObjectModel
             public bool CanExecute(int slotID, int itemID, int itemNum)
             {
                 if (_inventorySource.Contains(slotID) == false)
-                {
                     return false;
-                }
 
                 if (_inventorySource[slotID].itemID != itemID)
-                {
                     return false;
-                }
 
                 if (_inventorySource[slotID].itemNum < itemNum)
-                {
                     return false;
-                }
 
                 return true;
             }
@@ -175,11 +160,12 @@ namespace RPG.Collections.ObjectModel
 
                 if (slotData.itemID != _inventorySource[slotID].itemID ||
                     slotData.itemNum != _inventorySource[slotID].itemNum)
-                {
-                    throw new Exception("[InventoryPresenter.RemoveCommand] - Execute");
-                }
+                    throw new Exception($"[InventoryPresenter.RemoveCommand] : Data is not matched");
 
                 int remains = slotData.itemNum - itemNum;
+                if (remains < 0)
+                    throw new Exception($"[InventoryPresenter.RemoveCommand] : Something wrong...");
+
                 InventorySlotData expectedSlot = new InventorySlotData(slotID,
                                                                        remains > 0 ? itemID : 0,
                                                                        remains);
@@ -190,7 +176,6 @@ namespace RPG.Collections.ObjectModel
                     itemID = expectedSlot.itemID,
                     itemNum = expectedSlot.itemNum,
                 });
-
                 Repositories.instance.SaveChanges();
 
                 _inventorySource[slotID] = expectedSlot;

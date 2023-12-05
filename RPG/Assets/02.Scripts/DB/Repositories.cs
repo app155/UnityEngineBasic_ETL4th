@@ -11,6 +11,7 @@ namespace RPG.DB
             GameDbContext.instance.SaveChanges();
         }
 
+
         protected override void Init()
         {
             base.Init();
