@@ -29,6 +29,11 @@ public class ClientBehaviour : NetworkBehaviour
         {
             SubmitJumpServerRpc();
         }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            GetComponent<CharacterController>().ChangeState(RPG.Controllers.State.Attack);
+        }
     }
 
     [ServerRpc]
