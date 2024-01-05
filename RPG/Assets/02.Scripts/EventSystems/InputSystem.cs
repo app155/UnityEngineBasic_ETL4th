@@ -99,6 +99,15 @@ namespace RPG.EventSystems
                     ui.Show();
             });
 
+            playerMap.RegisterKeyDownAction(KeyCode.F12, () =>
+            {
+                ChatLogUI ui = UIManager.instance.Get<ChatLogUI>();
+                if (ui.gameObject.activeSelf)
+                    ui.Hide();
+                else
+                    ui.Show();
+            });
+
             maps.Add("Player", playerMap);
             current = "Player";
         }
